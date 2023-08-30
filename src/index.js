@@ -2074,34 +2074,33 @@ function set_default()
     active_bonuses = {};
     mis_move_speed = 19;
 }
-function update_time()
-{
-
-}
-function show_ad()
+function check_ad()
 {
     bridge.send('VKWebAppCheckNativeAds', { ad_format: 'interstitial' })
     .then((data) => {
     if (data.result) {
       // Предзагруженная реклама есть.
-
       // Теперь можно создать кнопку
       // "Посмотрите рекламу".   
       // ...
             
     } else {
-      console.log('Рекламные материалы не найдены.');
+        alert("Пожалуйста, выключите блокировщик рекламы. Я так не могу работать :(");
     }
-  })
-    .catch((error) => { console.log(error); /* Ошибка */  });
+     })
+    .catch((error) => { alert("здесь должна быть какая-то ошибка"); /* Ошибка */  });
+}
+function show_ad()
+{
+    check_ad();
     bridge.send('VKWebAppShowNativeAds', { ad_format: 'interstitial' })
     .then((data) => {
     if (data.result)
         console.log('Реклама показана');
     else
-        console.log('Ошибка при показе');
+        alert('Ошибка при показе');
     })
-    .catch((error) => { console.log(error); /* Ошибка */ });
+    .catch((error) => { alert(2); /* Ошибка */ });
 }
 
 function move_bonuses()
