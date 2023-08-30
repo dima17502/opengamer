@@ -2072,7 +2072,7 @@ function restart()
 {
 
     set_default();
-    var ng_id = setTimeout(new_game, ad_time);
+    new_game();
     show_ad();
 }
 
@@ -2212,13 +2212,16 @@ function move_bonuses()
                     active_bonuses[key] = 0;
                     bonlem.style.marginTop = start_mt_bonus + "px";
                     free_bonuses.push(key);
-                    const lifes = document.getElementById("lifesCounter");
-                    player_lifes -= 1;
-                    lifes.innerText = "x" + player_lifes;
-                    if(player_lifes <= 0)
+                    if(regime == "peaceful")
                     {
-                        game_status = 0;
-                        display_lose_bar();
+                        const lifes = document.getElementById("lifesCounter");
+                        player_lifes -= 1;
+                        lifes.innerText = "x" + player_lifes;
+                        if(player_lifes <= 0)
+                        {
+                            game_status = 0;
+                            display_lose_bar();
+                        }
                     }
                 }
             }
