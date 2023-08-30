@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="svg2" viewBox="0 0 68.08 68.08" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs4">
+    <filter style="color-interpolation-filters:sRGB" id="filter3816-7">
+      <feGaussianBlur id="feGaussianBlur3818-6" stdDeviation="0.63462833"/>
+    </filter>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="-181.815" y1="1323.714" x2="-181.815" y2="1387.177" id="gradient-0">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="-181.815" y1="1323.714" x2="-181.815" y2="1387.177" id="gradient-1">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="-181.815" y1="1323.714" x2="-181.815" y2="1387.177" id="gradient-2">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="-181.815" y1="1323.714" x2="-181.815" y2="1387.177" id="gradient-3">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="241.96" y1="779.92" x2="241.96" y2="821.42" id="gradient-4">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="22.694" y1="13.769" x2="22.694" y2="62.75" id="gradient-5">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="111.626" y1="-32.047" x2="111.626" y2="110.973" id="gradient-6">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="167.676" y1="-78.98" x2="167.676" y2="157.947" id="gradient-7">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="219.973" y1="-122.493" x2="219.973" y2="201.513" id="gradient-8">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="22.694" y1="13.769" x2="22.694" y2="62.75" id="gradient-9">
+      <stop offset="0" style="stop-color: rgba(187, 218, 85, 1)"/>
+      <stop offset="1" style="stop-color: rgba(135, 165, 36, 1)"/>
+    </linearGradient>
+  </defs>
+  <g style="display:inline" id="g4186">
+    <g id="g4190" transform="translate(-207.94,-760.376)">
+      <circle r="31.731417" cy="1355.4458" cx="-181.81483" id="circle4192" style="stroke: rgb(0, 0, 0); filter: url('#filter3816-7'); fill: url('#gradient-0');" transform="matrix(1.0085,0,0,1.0085,425.31,-572.52)"/>
+      <circle r="31.731417" cy="1355.4458" cx="-181.81483" id="circle4194" style="fill: url('#gradient-1');" transform="matrix(1.0085,0,0,1.0085,425.31,-572.52)"/>
+      <circle r="31.731417" cy="1355.4458" cx="-181.81483" id="circle4196" style="fill: url('#gradient-2');" transform="matrix(0.88241,0,0,0.88241,402.39,-401.65)"/>
+      <circle r="31.731417" cy="1355.4458" cx="-181.81483" id="circle4198" style="fill: url('#gradient-3');" transform="matrix(0.85089,0,0,0.85089,396.66,-358.94)"/>
+      <path id="path4200" style="fill: url('#gradient-4');" d="m 240.96,779.92 c -5.9532,0 -11.223,2.89 -14.5,7.3438 -1.7374,-0.5587 -3.577,-0.8438 -5.5,-0.8438 -1.7392,0 -3.4091,0.2585 -5,0.7188 -0.64736,2.3166 -1,4.758 -1,7.2812 0,14.912 12.088,27 27,27 14.912,0 27,-12.088 27,-27 0,-2.2384 -0.26779,-4.4201 -0.78125,-6.5 -2.2106,-0.9694 -4.6503,-1.5 -7.2188,-1.5 -1.923,0 -3.7626,0.2852 -5.5,0.8438 -3.2767,-4.4539 -8.5468,-7.3438 -14.5,-7.3438 z"/>
+    </g>
+    <g style="display:inline" id="g4298-2">
+      <g style="fill:none" transform="matrix(0.09702804,0,0,0.09702804,30.681889,30.239396)" id="g4266-8">
+        <polygon style="display: inline; fill-opacity: 1; stroke: rgb(0, 0, 0); stroke-width: 3.86486; stroke-linejoin: round; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.72549; fill: url('#gradient-5');" points="39.389,13.769 39.389,13.769 22.235,28.606 6,28.606 6,47.699 21.989,47.699 39.389,62.75 " id="polygon1-9-9" transform="matrix(6.6666665,0,0,6.6666665,-219.15028,-215.89316)"/>
+        <path style="display: inline; stroke: rgb(0, 0, 0); stroke-width: 25.7657; stroke-linecap: round; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.72549; fill: url('#gradient-6');" d="m 101.70304,110.97349 c 12.86,-20.64 20.41333,-44.92666 20.41333,-71.01999 0,-26.52 -7.76,-51.16 -20.98,-72" id="path1-8-5"/>
+        <path style="display: inline; stroke: rgb(0, 0, 0); stroke-width: 25.7657; stroke-linecap: round; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.72549; fill: url('#gradient-7');" d="m 148.06304,-78.979835 c 24.63333,33.239999 39.22666,74.3799947 39.22666,118.933335 0,44.13999 -14.34,84.91999 -38.58666,117.99333" id="path2-6-3"/>
+        <path style="display: inline; stroke: rgb(0, 0, 0); stroke-width: 25.7657; stroke-linecap: round; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.72549; fill: url('#gradient-8');" d="m 192.2497,201.51349 c 35.11334,-44.44 56.12,-100.53333 56.12,-161.55333 0,-61.44666 -21.28,-117.879995 -56.79333,-162.45333" id="path8-1-2"/>
+      </g>
+      <polygon style="display: inline; fill-opacity: 1; stroke: none; stroke-width: 3.86486; stroke-linejoin: round; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.72549; fill: url('#gradient-9');" points="21.989,47.699 39.389,62.75 39.389,13.769 39.389,13.769 22.235,28.606 6,28.606 6,47.699 " id="polygon1-9-0-4" transform="matrix(0.64685358,0,0,0.64685358,9.4181665,9.2917056)"/>
+    </g>
+  </g>
+</svg>
