@@ -32,7 +32,6 @@
 import bridge from '@vkontakte/vk-bridge';
 bridge.send("VKWebAppInit", {});
 
-
 var vk_width = 900;
 var vk_height = 750;
 var player_width = 80;
@@ -131,6 +130,11 @@ var music_on = 1;
 var last_song = './audios/main_theme.mp3';
 var ad_width = 890;
 var ad_height = 600;
+var mobile_mode = 0;
+var x = window.matchMedia("(max-width: 700px)");
+var s_width = window.innerWidth;
+var s_height = window.innerHeight;
+
 
 
 main();
@@ -139,6 +143,8 @@ main();
 function main()
 {
     date3 = new Date();
+
+    adoptate();
     set_area();
     create_ad_warning();
 
@@ -168,6 +174,13 @@ function main()
 
 }
 
+function adoptate()
+{
+    if(s_width < 800)
+        mobile_mode = 1;
+}
+
+
 function create_ad_warning()
 {
     const adlem = document.createElement("div");
@@ -183,7 +196,7 @@ function create_ad_warning()
     adlem.style.zIndex = "1000";
     const wind = document.getElementById("window");
     wind.appendChild(adlem);
-    
+    wind.style.overflow = "hidden";
 }
 
 function create_audio_button()
@@ -333,7 +346,7 @@ function display_animated_stars()
     const winbar = document.getElementById("winBar");
     const starbar = document.getElementById("starBar5");
     var rect = winbar.getBoundingClientRect();
-    starbar.style.marginLeft = rect.right - 3 * star_width - 15 + "px";
+    starbar.style.marginLeft = rect.right - 3 * star_width  + "px";
     starbar.style.marginTop = rect.top + 15 + "px";
     for(var i = 1; i <= 3; i++)
     {
@@ -1349,15 +1362,16 @@ function mouse_out_start()
 function set_area()
 {
    // document.body.style.background = "url('./images/back.jpg')";
+
     document.body.style.overflow = "hidden";
-    document.body.margin = "0";
-    document.body.padding = "0;"
-    document.body.height = vk_height + "px";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0;"
+    document.body.style.height = "100%";
     document.body.style.fontFamily = "Open Sans";
     const wind_lem = document.createElement("div");
     wind_lem.id = "window";
-    wind_lem.style.marginTop = "-10px";
-    wind_lem.style.marginLeft = "-10px";
+    //wind_lem.style.marginTop = "-10px";
+    //wind_lem.style.marginLeft = "-10px";
     wind_lem.style.position = "absolute";
     wind_lem.style.display = "block";
     wind_lem.style.width = vk_width +"px";
@@ -1493,6 +1507,9 @@ function create_player()
     player.onclick = player_clicked;
     player.onmousedown = player_catched;
     player.onmouseup = player_uncatched;
+    player.ontouchstart = player_catched;
+    player.ontouchend = player_uncatched;
+    document.body.ontouchmove = mouse_moved;
     const gf = document.getElementById("gameField");
     gf.appendChild(player);
 }
@@ -1588,13 +1605,28 @@ function mouse_moved(e)
         const player = document.getElementById("player");
         if(player_active)
         {
-            var nx1 = e.clientX - 80;
-            var nx2 = nx1 + player_width;
-            var ny1 = e.clientY - 60;
-            var ny2 = ny1 + player_height;
+            var nx1, nx2,ny1,ny2;
+            var cx, cy;
+            if(mobile_mode == 0)
+            {
+                nx1 = e.clientX - 80;
+                ny1 = e.clientY - 60;
+                cx = e.clientX;
+                cy = e.clientY;
+            }
+            else
+            {
+                nx1 = e.touches[0].clientX - 80;
+                ny1 = e.touches[0].clientY - 80;
+                cx = e.touches[0].clientX;
+                cy = e.touches[0].clientY;
+            }
+            nx2 = nx1 + player_width;
+            ny2 = ny1 + player_height;
+
             if(nx1 >= 0 && nx2 <= gf_width)
             {
-                player.style.marginLeft = e.clientX - 80 + "px";
+                player.style.marginLeft = cx - 80 + "px";
                 x1 = nx1;
                 x2 = nx2;
             }
@@ -1612,8 +1644,8 @@ function mouse_moved(e)
             }
             if(ny1 >= 0 && ny2 <= gf_height)
             {
-                player.style.marginTop = e.clientY - 60 + "px";
-                y1 = gf_height - e.clientY - 50;
+                player.style.marginTop = cy - 60 + "px";
+                y1 = gf_height - cy - 50;
                 y2 = y1 + player_height;
             }
             else if(ny1 < 0)
