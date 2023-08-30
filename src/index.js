@@ -26,6 +26,8 @@
         -  верстка: при mouseoverlevel смещать на border-width вниз starBarб а на out наоборот
 
       !!!!!!  - проверка на adblock, если рекламы нет - ad_time = 0; или попросить пользователя выключить блокировщик рекламы
+
+      - сделать мобильную версию, найти ивент под mouse touch
 */
 import bridge from '@vkontakte/vk-bridge';
 bridge.send("VKWebAppInit", {});
@@ -127,6 +129,10 @@ var change2_id = 0;
 var change3_id = 0;
 var music_on = 1;
 var last_song = './audios/main_theme.mp3';
+var ad_width = 890;
+var ad_height = 600;
+
+
 main();
 
 
@@ -134,6 +140,8 @@ function main()
 {
     date3 = new Date();
     set_area();
+    create_ad_warning();
+
     create_main_page();
     create_level_page();
     create_plevel_page();
@@ -156,7 +164,26 @@ function main()
     create_lifes_bar();
     create_stars();
     create_audio_button();
+    check_ad();
 
+}
+
+function create_ad_warning()
+{
+    const adlem = document.createElement("div");
+    adlem.id = "adWarning";
+    adlem.style.position = "absolute";
+    adlem.style.background = "url('./images/cat_warning.jpg')";
+    //alert(adlem.style.background);
+    adlem.style.border = "3px solid black";
+    adlem.style.width = ad_width + "px";
+    adlem.style.height = ad_height + "px";
+    adlem.style.marginTop = "100px";
+    adlem.style.display = "none";
+    adlem.style.zIndex = "1000";
+    const wind = document.getElementById("window");
+    wind.appendChild(adlem);
+    
 }
 
 function create_audio_button()
@@ -219,11 +246,12 @@ function music_clicked()
 }
 function set_main_theme()
 {
-    const audio = document.getElementById("audio");
-    audio.setAttribute('src', './audios/main_theme.mp3');
-    last_song = './audios/main_theme.mp3';
-    audio.currentTime = 0;
-    audio.play();
+        const audio = document.getElementById("audio");
+        audio.setAttribute('src', './audios/main_theme.mp3');
+        last_song = './audios/main_theme.mp3';
+        audio.currentTime = 0;
+        if(music_on)
+            audio.play();
 }
 
 function set_play_theme()
@@ -232,7 +260,8 @@ function set_play_theme()
     audio.setAttribute('src', './audios/play_theme.mp3');
     audio.currentTime = 0;
     last_song = './audios/play_theme.mp3';
-    audio.play();
+    if(music_on)
+        audio.play();
 }
 
 function create_stars()
@@ -1321,10 +1350,14 @@ function set_area()
 {
    // document.body.style.background = "url('./images/back.jpg')";
     document.body.style.overflow = "hidden";
+    document.body.margin = "0";
+    document.body.padding = "0;"
+    document.body.height = vk_height + "px";
     document.body.style.fontFamily = "Open Sans";
     const wind_lem = document.createElement("div");
     wind_lem.id = "window";
     wind_lem.style.marginTop = "-10px";
+    wind_lem.style.marginLeft = "-10px";
     wind_lem.style.position = "absolute";
     wind_lem.style.display = "block";
     wind_lem.style.width = vk_width +"px";
@@ -2085,7 +2118,9 @@ function check_ad()
       // ...
             
     } else {
-        alert("Пожалуйста, выключите блокировщик рекламы. Я так не могу работать :(");
+            const adlem = document.getElementById("adWarning");
+            adlem.style.display = "block";
+       // alert("Пожалуйста, выключите блокировщик рекламы. Я так не могу работать :(");
     }
      })
     .catch((error) => { alert("здесь должна быть какая-то ошибка"); /* Ошибка */  });
