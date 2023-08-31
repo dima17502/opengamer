@@ -2156,8 +2156,11 @@ function check_ad()
       // ...
             
     } else {
+        if(mobile_mode == 0)
+        {
             const adlem = document.getElementById("adWarning");
             adlem.style.display = "block";
+        }
        // alert("Пожалуйста, выключите блокировщик рекламы. Я так не могу работать :(");
     }
      })
