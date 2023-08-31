@@ -178,8 +178,8 @@ function main()
 function adoptate()
 {
     //alert([s_width, s_height]);
-    vk_width = 360;
-    vk_height = 736;
+    vk_width = parseInt(document.body.clientWidth);
+    vk_height = parseInt(document.body.clientHeight);
     if(s_width < 800)
     {
         mobile_mode = 1;
