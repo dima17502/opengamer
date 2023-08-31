@@ -176,8 +176,13 @@ function main()
 
 function adoptate()
 {
+    alert([s_width, s_height]);
     if(s_width < 800)
+    {
         mobile_mode = 1;
+        const adlem = document.getElementById("adWarning");
+        adlem.style.display = "none";
+    }
 }
 
 
@@ -1866,6 +1871,7 @@ function hide_pause_button()
 }
 function display_win_bar()
 {
+    show_ad();
     const gf = document.getElementById("gameField");
     const winbar = document.getElementById("winBar");
     gf.style.opacity = "0.5";
@@ -2062,6 +2068,7 @@ function mouse_out_choice()
 
 function display_lose_bar()
 {
+    show_ad();
     const gf = document.getElementById("gameField");
     gf.style.opacity = "0.5";
     const rb = document.getElementById("loseBar");
@@ -2073,7 +2080,6 @@ function restart()
 
     set_default();
     new_game();
-    show_ad();
 }
 
 function set_default()
