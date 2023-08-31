@@ -1384,9 +1384,10 @@ function set_area()
     //wind_lem.style.marginLeft = "-10px";
     wind_lem.style.position = "absolute";
     wind_lem.style.display = "block";
+    wind_lem.style.overflow = "hidden";
     wind_lem.style.width = vk_width +"px";
     wind_lem.style.height = vk_height + "px";
-    wind_lem.style.border = "1px solid blue";
+    //wind_lem.style.border = "1px solid blue";
     wind_lem.style.background = "url('./images/back_900_750.jpg')";
     document.body.appendChild(wind_lem);
 }
