@@ -143,7 +143,7 @@ main();
 function main()
 {
     date3 = new Date();
-
+    
     adoptate();
     set_area();
     create_ad_warning();
@@ -1372,7 +1372,7 @@ function mouse_out_start()
 function set_area()
 {
    // document.body.style.background = "url('./images/back.jpg')";
-
+    document.body.style.background = "green";
     document.body.style.overflow = "hidden";
     document.body.style.margin = "0";
     document.body.style.padding = "0;"
