@@ -144,7 +144,7 @@ function main()
 {
     date3 = new Date();
     
-    adoptate();
+    adaptate();
     set_area();
     create_ad_warning();
 
@@ -175,7 +175,7 @@ function main()
 
 }
 
-function adoptate()
+function adaptate()
 {
     //alert([s_width, s_height]);
     vk_width = parseInt(document.body.clientWidth);
@@ -185,8 +185,8 @@ function adoptate()
         mobile_mode = 1;
         //const adlem = document.getElementById("adWarning");
         //adlem.style.display = "none";
-        vk_height = s_height;
-        vk_width = s_width;
+        //vk_height = s_height;
+        //vk_width = s_width;
     }
 }
 
