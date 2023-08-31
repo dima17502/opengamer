@@ -132,7 +132,7 @@ var ad_width = 890;
 var ad_height = 600;
 var mobile_mode = 0;
 var x = window.matchMedia("(max-width: 700px)");
-var s_width = window.innerWidth;
+var s_width = window.innerWidth;            // 360 * 736
 var s_height = window.innerHeight;
 
 
@@ -148,7 +148,8 @@ function main()
     set_area();
     create_ad_warning();
 
-    create_main_page();
+    //create_main_page();
+    
     create_level_page();
     create_plevel_page();
     create_warning();
@@ -176,12 +177,16 @@ function main()
 
 function adoptate()
 {
-    alert([s_width, s_height]);
+    //alert([s_width, s_height]);
+    vk_width = 360;
+    vk_height = 736;
     if(s_width < 800)
     {
         mobile_mode = 1;
-        const adlem = document.getElementById("adWarning");
-        adlem.style.display = "none";
+        //const adlem = document.getElementById("adWarning");
+        //adlem.style.display = "none";
+        vk_height = s_height;
+        vk_width = s_width;
     }
 }
 
