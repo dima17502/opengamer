@@ -28,24 +28,19 @@
       !!!!!!  - проверка на adblock, если рекламы нет - ad_time = 0; или попросить пользователя выключить блокировщик рекламы
 
       - сделать мобильную версию, найти ивент под mouse touch
+
+        -научиться делать куки, и загружаться из кук пользователя сохраняя результаты
+        - после "пробуем еще?" нужно добавить кнопку в Меню, дизайн взять с элемента yessure
 */
 import bridge from '@vkontakte/vk-bridge';
 bridge.send("VKWebAppInit", {});
 
-var vk_width = 900;
-var vk_height = 750;
-var player_width = 80;
-var player_height = 106;
-var gf_width = 700;
-var gf_height = 700;
-var missile_width = 39;
-var missile_height = 100;
 var gf_color = "#fff";
-var info_width = "650px";
+var info_width = 650;
 var info_height = "auto";
 var start_mt_bonus = -40;
 var start_mt_missile = -100;
-var bonus_width = 40;
+var bonus_width = 40;       //40*40
 var bonus_height = 40;
 var bonus_counter = 0;
 var game_status = 0;
@@ -83,6 +78,12 @@ var player_mt0 = 595;
 var created_bonuses = 50;
 var created_missiles = 100;
 var ad_time = 5000;
+var player_width = 80;
+var player_height = 106;
+var gf_width = 700;
+var gf_height = 700;
+var missile_width = 39;
+var missile_height = 100;
 var music_width = 60;
 var music_height = 60;
 var page_width = 400;
@@ -103,26 +104,26 @@ var peaceful_mode = 0;
 var zero_atoms = 0;
 var level_dict = {"easy": 1, "peasy":1, "medium":2,"pmedium":2, "hard":3, "phard":3, "custom":4, "pcustom":4};
 var num_to_level = {1:"easy", 2:"medium", 3:"hard", 4:"custom"};
-var level_options = {1: 323, 2:173, 3:149};
+var level_options = {1: 423, 2:173, 3:149};
 var plevel_options = {1: 332, 2:267, 3:233};
 var current_lvl = 1;
 var win_time = 60;
-var pause_width = 70;
-var pause_height = 70;
-var home_width = 80;
-var home_height = 80;
-var heart_width = 46;
-var heart_height = 44;
-var text_60sec = "Продержитесь 60 секунд уворачиваясь от ракет \n Управление стрелками / клавишами 'wasd' / зажатым курсором или пальцем. Пауза - пробел \nУдачи!";
-var text_peaceful = "Ловите атомы в течение минуты, до того как они упадут на землю. \nУ вас 3 жизни. \nУправление зажатым курсором, пальцем, клавишами 'wasd'. Пауза - пробел. Удачи!";
+var pause_width = 60;
+var pause_height = 60;
+var home_width =   62;
+var home_height = 62;
+var heart_width = 56;       // 35 * 28
+var heart_height = 48;
+var text_60sec = "Продержитесь 60 секунд уворачиваясь от ракет \n Управление стрелками / клавишами 'wasd' / зажатым курсором или пальцем. \nПауза - пробел \nУдачи!";
+var text_peaceful = "Ловите атомы в течение минуты, до того как они упадут на землю. \nУ вас 3 жизни. \nУправление зажатым курсором, пальцем, клавишами 'wasd'. \nПауза - пробел. Удачи!";
 var player_lifes = 3;
 var peaceful_available = 1;
 var temp_lvl = 1;
 var star_width = 40;
 var star_height = 40;
 var star_dict = {1:0,2:0,3:0, 4:0};
-var gray_path_value = "url('./images/star_icon_gray.png')";
-var gold_path_value = "url('./images/star_icon.svg')";
+var gray_path_value = "url('./images/star_icon_gray2.svg')";
+var gold_path_value = "url('./images/star_icon3.svg')";
 var change1_id = 0;
 var change2_id = 0;
 var change3_id = 0;
@@ -134,7 +135,18 @@ var mobile_mode = 0;
 var x = window.matchMedia("(max-width: 700px)");
 var s_width = window.innerWidth;            // 360 * 736
 var s_height = window.innerHeight;
-
+//alert([s_width, s_height]);
+if(s_width < 900)
+    mobile_mode = 1;
+var vk_width = s_width;
+var vk_height = s_height;
+if(mobile_mode == 0)
+{
+    vk_width = 900;
+    vk_height = 750;
+}
+var coef_x = parseFloat(parseInt(vk_width)  / 900);
+var coef_y = parseFloat(parseInt(vk_height)  / 750);
 
 
 main();
@@ -145,22 +157,21 @@ function main()
     date3 = new Date();
     
     adaptate();
-    set_area();
+    set_area();                 //
     create_ad_warning();
 
-    //create_main_page();
+    create_main_page();         //
     
-    create_level_page();
-    create_plevel_page();
-    create_warning();
+    create_level_page();        //
+    create_plevel_page();       //
+    create_warning();           
     
-    create_start_and_info();
-    create_game_field();
-    create_best_results();
-    create_clock();
-    create_bonus_bar();
-    create_player();
-    create_missiles();
+    create_start_and_info();    //
+    create_game_field();        //
+    create_clock();             //
+    create_bonus_bar();         //
+    create_player();            //
+    create_missiles();          
     create_bonuses();
     create_lose_bar();
     create_win_bar();
@@ -168,9 +179,9 @@ function main()
     create_pause_button();
     create_home_button();
     create_sure_bar();
-    create_lifes_bar();
-    create_stars();
-    create_audio_button();
+    create_lifes_bar();         
+    create_stars();             //
+    create_audio_button();      //
     check_ad();
 
 }
@@ -178,15 +189,15 @@ function main()
 function adaptate()
 {
     //alert([s_width, s_height]);
-    vk_width = parseInt(document.body.clientWidth);
-    vk_height = parseInt(document.body.clientHeight);
+
     if(s_width < 800)
     {
         mobile_mode = 1;
-        //const adlem = document.getElementById("adWarning");
-        //adlem.style.display = "none";
-        //vk_height = s_height;
-        //vk_width = s_width;
+        
+    }
+    else
+    {
+    
     }
 }
 
@@ -211,6 +222,8 @@ function create_ad_warning()
 
 function create_audio_button()
 {
+    const home = document.getElementById("homeBtn");
+    //alert(home.id);
     const audio = document.createElement("audio");
     audio.id = "audio";
     audio.setAttribute('src', './audios/main_theme.mp3');
@@ -218,12 +231,14 @@ function create_audio_button()
     const music = document.createElement("div");
     music.id = "music";
     music.style.position = "absolute";
-    music.style.width = music_width + "px";
-    music.style.height = music_height + "px";
-    music.style.background = "url('./images/music_on.svg')";
+    music.style.width = parseInt(music_width*(coef_x+ coef_y)/2) + "px";
+    music.style.height = parseInt(music_height*(coef_x+ coef_y)/2) + "px";
+    music.style.background = "url('./images/music_on2.svg')";
+    music.style.backgroundSize = "cover";
+    music.style.backgroundRepeat = "no-repeat";
     //music.style.borderRadius = "50%";
-    music.style.marginLeft = "780px";
-    music.style.marginTop = "500px";
+    music.style.marginLeft = (vk_width - parseInt(music.style.width) - parseInt(coef_x * 10)) + "px";
+    music.style.marginTop =  (parseInt(home.style.marginTop) - parseInt(1.5 * parseInt(music.style.height))) + "px";
     music.style.opacity = "0.8";
     music.onclick = music_clicked;
     music.onmouseover = mouse_over_music;
@@ -256,12 +271,16 @@ function music_clicked()
     {
         music_on = 0;
         audio.pause();
-        music.style.background = "url('./images/music_off.svg')";
+        music.style.background = "url('./images/music_off2.svg')";
+        music.style.backgroundSize = "cover";
+        music.style.backgroundRepeat = "no-repeat";
     }
     else
     {
         music_on = 1;
-        music.style.background = "url('./images/music_on.svg')";
+        music.style.background = "url('./images/music_on2.svg')";
+        music.style.backgroundSize = "cover";
+        music.style.backgroundRepeat = "no-repeat";
         audio.setAttribute('src', last_song);
         audio.loop = "true";
         audio.play();
@@ -303,10 +322,12 @@ function create_stars()
             starlem.id = j + "s" + i;
 
             starlem.style.position = "relative";
-            starlem.style.width = star_width + "px";
-            starlem.style.height = star_height + "px";
+            starlem.style.width = parseInt((coef_x)*1.3 * star_width) + "px";
+            starlem.style.height = parseInt((coef_x) *1.3* star_height) + "px";
             //starlem.style.display = "inline-block";
             starlem.style.background = gray_path_value;
+            starlem.style.backgroundSize = "cover";
+            starlem.style.backgroundRepeat = "no-repeat";
             starlem.style.display = "none";
             starBar.appendChild(starlem);
         }
@@ -344,10 +365,14 @@ function display_stars()
                 elem.style.background = gold_path_value;
             else
                 elem.style.backround = gray_path_value;
+            elem.style.backgroundSize = "cover";
+            elem.style.backgroundRepeat = "no-repeat";
             elem.style.display = "inline-block";
         }
-        starbar.style.marginLeft = rectpage.right - 3 * star_width - 30 + "px";
-        starbar.style.marginTop = rect.top + 10 + "px";
+        const star = document.getElementById("1s1");
+
+        starbar.style.marginLeft =   parseInt(rectpage.right - 3  * parseInt(star.style.width) - (coef_x*1.3) * 30) + "px";
+        starbar.style.marginTop = rect.top + ((rect.bottom - rect.top)  - parseInt(star.style.height)) / 2 + "px";
     }
 }
 
@@ -355,9 +380,20 @@ function display_animated_stars()
 {
     const winbar = document.getElementById("winBar");
     const starbar = document.getElementById("starBar5");
+    const mainlem = document.getElementById("mainBtn");
+    const star = document.getElementById(5 + "s" + 1);
+
     var rect = winbar.getBoundingClientRect();
-    starbar.style.marginLeft = rect.right - 3 * star_width  + "px";
-    starbar.style.marginTop = rect.top + 15 + "px";
+    var rect2 = mainlem.getBoundingClientRect();
+    //starbar.style.marginLeft =  parseInt((rect.right - rect.left - 3* parseInt(star.style.width))/2) + "px";
+    //starbar.style.marginTop = rect2.top - parseInt(star.style.height) - 5 + "px";
+    starbar.style.display = "inline-block";
+    starbar.style.position = "relative";
+    starbar.style.width = "100%";
+    starbar.style.marginTop = "10px";
+    //starbar.style.border = "1px solid red";
+    winbar.insertBefore(starbar, mainlem);
+
     for(var i = 1; i <= 3; i++)
     {
         const star = document.getElementById(5 + "s" + i);
@@ -365,6 +401,10 @@ function display_animated_stars()
             star.style.background = gold_path_value;
         else
             star.style.background = gray_path_value;
+        star.style.backgroundSize = "cover";
+        star.style.width = parseInt(star.style.width) * 1.4 + "px";
+        star.style.height = parseInt(star.style.height) * 1.4 + "px";
+        star.style.backgroundRepeat = "no-repeat";
         star.style.opacity = "0";
         star.style.display = "inline-block";
     }
@@ -438,12 +478,14 @@ function create_pause_button()
     pause.id = "pauseBtn";
     pause.style.position = "absolute";
     pause.style.display = "inline";
-    pause.style.width = pause_width + "px";
-    pause.style.height = pause_height + "px";
-    pause.style.background = "url('./images/pause_icon.svg')";
+    pause.style.width = parseInt((coef_x + coef_y)/2 * pause_width) + "px";
+    pause.style.height = parseInt((coef_x+coef_y)/2 * pause_height) + "px";
+    pause.style.background = "url('./images/pause_icon2.svg')";
+    pause.style.backgroundSize = "cover";
+    pause.style.backgroundRepeat = "no-repeat";
     pause.style.borderRadius = "50%";
-    pause.style.marginLeft = "770px";
-    pause.style.marginTop = "300px";
+    pause.style.marginLeft = vk_width - parseInt(pause.style.width) - parseInt(coef_x * 10) + "px";
+    pause.style.marginTop = parseInt(vk_height/2) - parseInt(pause.style.height) + "px";
     pause.onclick = pause_clicked;
     pause.onmouseover = mouse_over_pause;
     pause.onmouseout = mouse_out_pause;
@@ -460,13 +502,17 @@ function pause_clicked()
     {
         game_status = 2;
         const pause = document.getElementById("pauseBtn");
-        pause.style.background = "url('./images/play_icon.svg')";
+        pause.style.background = "url('./images/play_icon2.svg')";
+        pause.style.backgroundSize = "cover";
+        pause.style.backgroundRepeat = "no-repeat";
     }
     else if(game_status == 2)
     {
         game_status = 1;
         const pause = document.getElementById("pauseBtn");
         pause.style.background = "url('./images/pause_icon.svg')";
+        pause.style.backgroundSize = "cover";
+        pause.style.backgroundRepeat = "no-repeat";
     }
 
 }
@@ -476,57 +522,58 @@ function create_lifes_bar()
     const lifes = document.createElement("div");
     lifes.id = "lifesBar";
     lifes.style.position = "absolute";
-    lifes.style.marginLeft = "775px";
-    lifes.style.padding = "10px";
-    lifes.style.background = "url('./images/heart_icon.svg')";
-    lifes.style.width = heart_width + "px";
-    lifes.style.height = heart_height + "px";
-    lifes.style.marginTop = "200px";
+    lifes.style.marginLeft = parseInt(coef_x * 775) + "px";
+    lifes.style.width = parseInt( (coef_x + coef_y ) /2 * heart_width) + "px";
+    lifes.style.height = parseInt((coef_x + coef_y ) /2 * heart_height ) + "px";
+
+    lifes.style.background = "url('./images/heart_icon4.svg')";
+    lifes.style.backgroundSize = "cover";
+    lifes.style.backgroundRepeat = "no-repeat";
+    lifes.style.marginTop = parseInt(coef_y * 200) + "px";
     const lc = document.createElement("div");
     lc.id = "lifesCounter";
-    lc.style.fontSize = "2.7em";
-    lc.style.position = "relative";
-    lc.style.marginLeft = "55px";
+    lc.style.position = "absolute";
+    lc.style.marginTop = parseInt(lifes.style.marginTop) + parseInt(lifes.style.height)  + "px";
+    lc.style.marginLeft = parseInt(lifes.style.marginLeft) + 10 + "px";
     lc.innerText = "x3";
-    lc.style.verticalAlign = "middle";
-    lc.style.lineHeight =  "30px";
-    lc.style.paddingBottom = "5px";
-    lifes.appendChild(lc);
-
+    lc.style.fontSize = (coef_x + coef_y) * 1.2 + "em";
+    lc.style.display = "none";
     lifes.style.display = "none";
-
     const wind = document.getElementById("window");
     wind.appendChild(lifes);
+    wind.appendChild(lc);
+
 }
 
 function create_plevel_page()
 {
+    var t = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     const levels = document.createElement("div");
     levels.id = "plevelPage";
-    levels.style.marginLeft = "200px";
-    levels.style.width = levels_width + "px";
-    levels.style.height = levels_height + "px";;
+    levels.style.marginLeft = "13%";
+    levels.style.width = "70%";
+    levels.style.height = "auto";
     levels.innerText = "Выберите уровень";
-    levels.style.fontSize = "1.9em";
+    levels.style.fontSize = (coef_x  + coef_y)*0.9+ "em";
     levels.style.background = "rgba(255,255,255,0.8)";
     levels.style.border = "3px solid black";
-    levels.style.padding = "10px";
+    levels.style.padding = t;
     levels.style.textAlign = "center";
-    levels.style.marginTop = "100px";
+    levels.style.marginTop = parseInt(coef_y * 200) + "px";
     levels.style.position = "absolute";
 
     const easy = document.createElement("div");
     easy.id = "peasy";
     easy.style.position = "relative";
     easy.innerText = "Легкий";
-    easy.style.width = "100%";           
+    easy.style.width = "90%";
+    easy.style.marginLeft = "3%";
     easy.onclick = level_chosen;
     easy.onmouseover = mouse_over_level;
     easy.onmouseout = mouse_out_level;
     easy.style.background = "#3e7";
-    easy.style.padding = "10px 0px ";
-    easy.style.marginTop = "30px";
-    easy.style.height = "auto";
+    easy.style.padding = t;
+    easy.style.marginTop = parseInt(coef_y *30) +"px";
     easy.style.display = "block";
     easy.style.borderRadius = "5%";
 
@@ -534,14 +581,14 @@ function create_plevel_page()
     med.id = "pmedium";
     med.style.position = "relative";
     med.innerText = "Средний";
-    med.style.width = "100%";
+    med.style.width = "90%";
+    med.style.marginLeft = "3%";
     med.onclick = level_chosen;
     med.onmouseover = mouse_over_level;
     med.onmouseout = mouse_out_level;
     med.style.background = "#777";
-    med.style.padding = "10px 0px";
-    med.style.marginTop = "20px";
-    med.style.height = "auto";
+    med.style.padding = t;
+    med.style.marginTop = parseInt(coef_y * 20) + "px";
     med.style.display = "block";
     med.style.borderRadius = "5%";
 
@@ -549,14 +596,14 @@ function create_plevel_page()
     hard.id = "phard";
     hard.style.position = "relative";
     hard.innerText = "Сложный";
-    hard.style.width = "100%";
+    hard.style.width = "90%";
+    hard.style.marginLeft = "3%";
     hard.onclick = level_chosen;
     hard.onmouseover = mouse_over_level;
     hard.onmouseout = mouse_out_level;
     hard.style.background = "#777";
-    hard.style.padding = "10px 0px ";
-    hard.style.marginTop = "20px";
-    hard.style.height = "auto";
+    hard.style.padding = t;
+    hard.style.marginTop = parseInt(coef_y * 20) + "px";
     hard.style.display = "block";
     hard.style.borderRadius = "5%";
 
@@ -564,26 +611,26 @@ function create_plevel_page()
     custom.id = "pcustom";
     custom.style.position = "relative";
     custom.innerText = "Пользовательский";
-    custom.style.width = "100%";
+    custom.style.width = "90%";
+    custom.style.marginLeft = "3%";
     custom.onclick = level_chosen;
     custom.onmouseover = mouse_over_level;
     custom.onmouseout = mouse_out_level;
     custom.style.background = "#777";
-    custom.style.padding = "10px 0px ";
-    custom.style.marginTop = "20px";
-    custom.style.height = "auto";
+    custom.style.padding = t;
+    custom.style.marginTop = parseInt(coef_y * 20) + "px";
     custom.style.display = "block";
     custom.style.borderRadius = "5%";
+    custom.style.marginBottom = "10px";
 
     levels.style.display = "none";
     levels.appendChild(easy);
     levels.appendChild(med);
     levels.appendChild(hard);
     levels.appendChild(custom);
-
-
     const wind = document.getElementById("window");
     wind.appendChild(levels);
+
 }
 
 
@@ -593,15 +640,19 @@ function create_sure_bar()
 {
     const sure = document.createElement("div");
     sure.id = "sureBar";
-    sure.style.marginLeft = "200px";
-    sure.style.width = sure_width + "px";
-    sure.style.height = sure_height + "px";
-    sure.style.fontSize = "2em";
+    //sure.style.marginLeft = parseInt(coef_x * 200) + "px";
+    sure.style.marginLeft = "20%";
+    //sure.style.width = parseInt(coef_x * sure_width) + "px";
+    sure.style.width = "50%";
+    //sure.style.height = parseInt(coef_y * sure_height) + "px";
+    sure.style.height = "auto";
+    sure.style.fontSize = (coef_x + coef_y) + "em";
     sure.style.background = "#fff";
     sure.style.border = "3px solid black";
-    sure.style.padding = "10px";
+    sure.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     sure.style.textAlign = "center";
-    sure.style.marginTop = "250px";
+    //sure.style.marginTop = parseInt(coef_y *250) + "px";
+    sure.style.marginTop = parseInt(vk_height * 0.35) + "px";
     sure.style.position = "absolute";
 
     const par = document.createElement("div");
@@ -610,50 +661,77 @@ function create_sure_bar()
     par.style.position = "relative";
     par.style.width = "100%";
     par.style.display = "block";
-
+    par.style.marginBottom = "5px";
 
     const yeslem = document.createElement("div");
     yeslem.id = "yesSure";
     yeslem.style.position = "relative";
-    yeslem.innerText = "В меню";
-    yeslem.style.width = "auto";
+   // yeslem.innerText = "В меню";
+    //yeslem.style.width = "auto";
     yeslem.style.marginLeft = "0";
     yeslem.onclick = yes_sure;
     yeslem.onmouseover = mouse_over_yes;
     yeslem.onmouseout = mouse_out_yes;
     yeslem.style.background = "#39f";
-    yeslem.style.padding = "20px";
-    yeslem.style.marginTop = "20px";
-    yeslem.style.marginBottom = "10px";
-    yeslem.style.height = "30px";
-    yeslem.style.lineHeight = "30px";
-    yeslem.style.verticalAlign = "middle";
+    yeslem.style.fontSize =  min_v(coef_x,coef_y)+ "em";
+    yeslem.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
+    yeslem.style.width = "40%";
     yeslem.style.display = "inline-block";
+    /*
+    yeslem.style.marginTop = parseInt(coef_y * 20) + "px";
+    yeslem.style.marginBottom = parseInt(coef_y * 10) + "px";
+    yeslem.style.height = parseInt(coef_y * 30) + "px";
+    yeslem.style.lineHeight = parseInt(coef_y * 30) + "px";
+    yeslem.style.verticalAlign = "middle";
+    yeslem.style.display = "inline";
     yeslem.style.borderRadius = "5%";
+*/
+    const yestext = document.createElement("span");
+    yestext.id = 'yestext';
+    yestext.onclick = yes_sure;
+    yestext.innerText = "В меню";
+    yestext.style.display = "inline-block";
+    yestext.style.transform = "scale(1, " + (coef_y / coef_x) + ")";
+    yeslem.appendChild(yestext);
 
     const cancel = document.createElement("div");
     cancel.id = "cancel";
-    cancel.style.position = "relative";
-    cancel.style.verticalAlign = "middle";
-    cancel.innerText = "Отмена";
-    cancel.style.width = "auto";
-    cancel.style.marginLeft = "10%";
+    cancel.style.marginLeft = "5%";
     cancel.onclick = cancel_sure;
     cancel.onmouseover = mouse_over_cancel;
     cancel.onmouseout = mouse_out_cancel;
     cancel.style.background = "#3e7";
-    cancel.style.padding = "20px";
-    cancel.style.marginTop = "20px";
-    cancel.style.marginBottom = "10px";
-    cancel.style.lineHeight = "30px";
-    cancel.style.height = "30px";
+    cancel.style.fontSize = min_v(coef_x, coef_y) + "em";
+    cancel.style.width = "40%";
     cancel.style.display = "inline-block";
-    cancel.style.borderRadius = "5%";
+    cancel.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
 
+    /*
+    cancel.style.position = "relative";
+    cancel.style.verticalAlign = "middle";
+    cancel.style.marginLeft = "10%";    
+    cancel.style.marginTop = parseInt(coef_y * 20) + "px";
+    cancel.style.marginBottom = parseInt(coef_y * 10) + "px";
+    cancel.style.lineHeight = parseInt(coef_y * 30) + "px";
+    cancel.style.height = parseInt(coef_y * 30) + "px";
+    cancel.style.display = "inline";
+    cancel.style.borderRadius = "5%";
+*/
+
+    const canceltext = document.createElement("span");
+    canceltext.id = 'canceltext';
+    canceltext.onclick = cancel_sure;
+    canceltext.innerText = "Отмена";
+    canceltext.style.display = "inline-block";
+    canceltext.style.transform = "scale(1, " + (coef_y / coef_x) + ")";
+    cancel.appendChild(canceltext);
+    
+    yeslem.appendChild(yestext);
     sure.style.display = "none";
     sure.appendChild(par);
     sure.appendChild(yeslem);
     sure.appendChild(cancel);
+
     const wind = document.getElementById("window");
     wind.appendChild(sure);
 }
@@ -727,13 +805,16 @@ function create_home_button()
     home.id = "homeBtn";
     home.style.position = "absolute";
     home.style.display = "inline";
-    home.style.width = home_width + "px";
-    home.style.height = home_height + "px";
-    home.style.background = "url('./images/home_icon.svg')";
+    home.style.width = parseInt((coef_x+ coef_y) / 2 * home_width) + "px";
+    home.style.height = parseInt((coef_x + coef_y)/2* home_height) + "px";
+    home.style.background = "url('./images/home_icon2.svg')";
+    //alert([home.style.width, home.style.height]);
+    home.style.backgroundSize = "cover";
+    home.style.backgroundRepeat = "no-repeat";
     home.style.borderRadius = "50%";
     home.style.opacity = "0.8";
-    home.style.marginLeft = "770px";
-    home.style.marginTop = "600px";
+    home.style.marginLeft = (vk_width  - parseInt(coef_x * 10) - parseInt(home.style.width)) + "px";
+    home.style.marginTop = parseInt(coef_y * 600) + "px";
     home.onclick = home_clicked;
     home.onmouseover = mouse_over_home;
     home.onmouseout = mouse_out_home;
@@ -787,16 +868,16 @@ function create_main_page()
 {
     const page = document.createElement("div");
     page.id = "mainPage";
-    page.style.marginLeft = "200px";
-    page.style.width = page_width + "px";
-    page.style.height = page_height + "px";;
+    page.style.width = "70%";
+    page.style.marginLeft = "13%";
+    page.style.height = "auto";
     page.innerText = "Выберите режим игры";
-    page.style.fontSize = "2em";
+    page.style.fontSize = (coef_x + coef_y) + "em";
     page.style.background = "rgba(255,255,255,0.8)";
     page.style.border = "3px solid black";
-    page.style.padding = "10px";
+    page.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     page.style.textAlign = "center";
-    page.style.marginTop = "200px";
+    page.style.marginTop = parseInt(200 * coef_y) + "px";
     page.style.position = "absolute";
 
     const peace = document.createElement("div");
@@ -809,8 +890,8 @@ function create_main_page()
     peace.onmouseover = mouse_over_regime;
     peace.onmouseout = mouse_out_regime;
     peace.style.background = "#1b5";
-    peace.style.padding = "20px 10px ";
-    peace.style.marginTop = "30px";
+    peace.style.padding = parseInt(coef_y * 20) + "px " + parseInt(coef_x * 10)+ "px";
+    peace.style.marginTop = parseInt(coef_y * 30) + "px";
     peace.style.height = "auto";
     peace.style.display = "block";
     peace.style.borderRadius = "5%";
@@ -825,12 +906,12 @@ function create_main_page()
     surlem.onmouseover = mouse_over_regime;
     surlem.onmouseout = mouse_out_regime;
     surlem.style.background = "#e37";
-    surlem.style.padding = "20px 10px";
-    surlem.style.marginTop = "30px";
+    surlem.style.padding = parseInt(coef_y * 20) + "px " + parseInt(coef_x * 10)+ "px";
+    surlem.style.marginTop = parseInt(coef_y * 30) + "px";
     surlem.style.height = "auto";
     surlem.style.display = "block";
     surlem.style.borderRadius = "5%";
-
+    surlem.style.marginBottom = "10px";
     page.appendChild(peace);
     page.appendChild(surlem);
 
@@ -842,33 +923,34 @@ function create_main_page()
 
 function create_level_page()
 {
+    var t = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
+
     const levels = document.createElement("div");
     levels.id = "levelPage";
-    levels.style.marginLeft = "200px";
-    levels.style.width = levels_width + "px";
-    levels.style.height = levels_height + "px";;
+    levels.style.marginLeft = "13%";
+    levels.style.width = "70%";
+    levels.style.height = "auto";
     levels.innerText = "Выберите уровень";
-    levels.style.fontSize = "1.9em";
+    levels.style.fontSize = (coef_x  + coef_y)*0.9+ "em";
     levels.style.background = "rgba(255,255,255,0.8)";
     levels.style.border = "3px solid black";
-    levels.style.padding = "10px";
+    levels.style.padding = t;
     levels.style.textAlign = "center";
-    levels.style.marginTop = "100px";
+    levels.style.marginTop = parseInt(coef_y * 200) + "px";
     levels.style.position = "absolute";
-
+    
     const easy = document.createElement("div");
     easy.id = "easy";
     easy.style.position = "relative";
     easy.innerText = "Легкий";
-    easy.style.width = "70%";
-    easy.style.marginLeft = "13%";
+    easy.style.width = "90%";
+    easy.style.marginLeft = "3%";
     easy.onclick = level_chosen;
     easy.onmouseover = mouse_over_level;
     easy.onmouseout = mouse_out_level;
     easy.style.background = "#3e7";
-    easy.style.padding = "10px 10px ";
-    easy.style.marginTop = "30px";
-    easy.style.height = "auto";
+    easy.style.padding = t;
+    easy.style.marginTop = parseInt(coef_y *30) +"px";
     easy.style.display = "block";
     easy.style.borderRadius = "5%";
 
@@ -876,15 +958,14 @@ function create_level_page()
     med.id = "medium";
     med.style.position = "relative";
     med.innerText = "Средний";
-    med.style.width = "70%";
-    med.style.marginLeft = "13%";
+    med.style.width = "90%";
+    med.style.marginLeft = "3%";
     med.onclick = level_chosen;
     med.onmouseover = mouse_over_level;
     med.onmouseout = mouse_out_level;
     med.style.background = "#777";
-    med.style.padding = "10px 10px ";
-    med.style.marginTop = "20px";
-    med.style.height = "auto";
+    med.style.padding = t;
+    med.style.marginTop = parseInt(coef_y * 20) + "px";
     med.style.display = "block";
     med.style.borderRadius = "5%";
 
@@ -892,15 +973,14 @@ function create_level_page()
     hard.id = "hard";
     hard.style.position = "relative";
     hard.innerText = "Сложный";
-    hard.style.width = "70%";
-    hard.style.marginLeft = "13%";
+    hard.style.width = "90%";
+    hard.style.marginLeft = "3%";
     hard.onclick = level_chosen;
     hard.onmouseover = mouse_over_level;
     hard.onmouseout = mouse_out_level;
     hard.style.background = "#777";
-    hard.style.padding = "10px 10px ";
-    hard.style.marginTop = "20px";
-    hard.style.height = "auto";
+    hard.style.padding = t;
+    hard.style.marginTop = parseInt(coef_y * 20) + "px";
     hard.style.display = "block";
     hard.style.borderRadius = "5%";
 
@@ -908,18 +988,17 @@ function create_level_page()
     custom.id = "custom";
     custom.style.position = "relative";
     custom.innerText = "Пользовательский";
-    custom.style.width = "70%";
-    custom.style.marginLeft = "13%";
+    custom.style.width = "90%";
+    custom.style.marginLeft = "3%";
     custom.onclick = level_chosen;
     custom.onmouseover = mouse_over_level;
     custom.onmouseout = mouse_out_level;
     custom.style.background = "#777";
-    custom.style.padding = "10px 10px ";
-    custom.style.marginTop = "20px";
-    custom.style.height = "auto";
+    custom.style.padding = t;
+    custom.style.marginTop = parseInt(coef_y * 20) + "px";
     custom.style.display = "block";
     custom.style.borderRadius = "5%";
-
+    custom.style.marginBottom = "10px";
     levels.style.display = "none";
     levels.appendChild(easy);
     levels.appendChild(med);
@@ -929,22 +1008,24 @@ function create_level_page()
 
     const wind = document.getElementById("window");
     wind.appendChild(levels);
+
 }
 
 function create_warning()
 {
     const warn = document.createElement("div");
     warn.innerText = "Сначала пройдите предыдущий уровень";
-    warn.style.fontSize = "2em";
+    warn.style.fontSize = (coef_x + coef_y)+ "em";
     warn.style.background = "#fff";
     warn.style.border = "3px solid black";
-    warn.style.padding = "10px";
+    warn.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     warn.style.textAlign = "center";
     warn.id = "warning";
-    warn.style.marginLeft = "200px";
-    warn.style.width = warning_width + "px";
-    warn.style.height = warning_height + "px";;
-    warn.style.marginTop = "200px";
+    warn.style.marginLeft = parseInt(coef_x * 200) + "px";
+    //warn.style.width = parseInt(coef_x * warning_width) + "px";
+    warn.style.width = "50%";
+    warn.style.height = parseInt(coef_y * warning_height) + "px";
+    warn.style.marginTop = parseInt(coef_y * 200) + "px";
     warn.style.position = "relative";
     
     const ok = document.createElement("div");
@@ -953,12 +1034,13 @@ function create_warning()
     ok.innerText = "Ок";
     ok.style.width = "70%";
     ok.style.marginLeft = "10%";
+    //ok.style.marginLeft = "auto";
     ok.onclick = clicked_ok;
     ok.onmouseover = mouse_over_ok;
     ok.onmouseout = mouse_out_ok;
     ok.style.background = "#3e7";
-    ok.style.padding = "10px 10px ";
-    ok.style.marginTop = "30px";
+    ok.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
+    ok.style.marginTop = parseInt(coef_y * 30) + "px";
     ok.style.height = "auto";
     ok.style.display = "block";
     ok.style.borderRadius = "5%";
@@ -1138,21 +1220,21 @@ function create_custom_menu()
     const cuslem = document.createElement("div");
     cuslem.id = "customMenu";
     //cuslem.innerText = "Выберите скорость ракет";
-    cuslem.style.fontSize = "2em";
+    cuslem.style.fontSize = (coef_x + coef_y) + "em";
     cuslem.style.background = "#fff";
     cuslem.style.border = "3px solid black";
-    cuslem.style.padding = "10px";
+    cuslem.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     cuslem.style.textAlign = "center";
-    cuslem.style.marginLeft = "200px";
+    cuslem.style.marginLeft = parseInt(coef_x * 200) + "px";
     cuslem.style.width = custom_menu_width + "px";
     cuslem.style.height = custom_menu_height + "px";;
-    cuslem.style.marginTop = "200px";
+    cuslem.style.marginTop = parseInt(coef_y * 200) + "px";
     cuslem.style.position = "relative";
     
     const textlem = document.createElement("div");
     textlem.id = "ptext";
     textlem.style.position = "absolute";
-    textlem.style.fontSize = "0.8em";
+    textlem.style.fontSize = (coef_x + coef_y) /2 * 0.8 + "em";
     textlem.style.width = "100%";
     textlem.style.height = "auto";
         
@@ -1168,8 +1250,8 @@ function create_custom_menu()
     range.style.width = "70%";
     range.style.height = "auto";
     range.style.marginLeft = "10%";
-    range.style.padding = "10px 10px ";
-    range.style.marginTop = "130px";
+    range.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
+    range.style.marginTop = parseInt(coef_y * 130) + "px";
     range.style.display = "block";
     range.oninput = input_range;
     
@@ -1179,7 +1261,7 @@ function create_custom_menu()
     output.style.position = "absolute";
     output.style.display = "block";
     output.style.width = "95%";
-    output.style.marginTop = "90px";
+    output.style.marginTop = parseInt(coef_y * 90) + "px";
     output.textContent = range.value;
     /*
     const outcont = document.createElement("div");
@@ -1192,7 +1274,7 @@ function create_custom_menu()
     choose.id = "chooseBtn";
     choose.innerText = "Выбрать";
     choose.onclick = speed_chosen;
-    choose.style.fontSize = "1.8em";
+    choose.style.fontSize = (coef_x + coef_y) / 2 * 1.8 + "em";
  
     choose.style.position = "absolute";
     choose.style.width = "70%";
@@ -1200,8 +1282,8 @@ function create_custom_menu()
     choose.onmouseover = mouse_over_choose;
     choose.onmouseout = mouse_out_choose;
     choose.style.background = "#3e7";
-    choose.style.padding = "10px 10px ";
-    choose.style.marginTop = "190px";
+    choose.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
+    choose.style.marginTop = parseInt(coef_y * 190) + "px";
     choose.style.height = "auto";
     choose.style.display = "block";
     choose.style.borderRadius = "5%";
@@ -1311,17 +1393,16 @@ function create_start_and_info()
     infolem.id = "info";
     infolem.style.position = "absolute";
     infolem.style.display = "block";
-    infolem.style.marginTop = "100px";
-    infolem.style.width = info_width;
-    infolem.style.height = info_height;
-    //infolem.innerText = text_60sec;
+    infolem.style.marginTop = parseInt(coef_y * 200) + "px";
+    infolem.style.width = parseInt(coef_x * info_width) + "px";
+    //infolem.style.height = parseInt(coef_y * info_height) + "px";
+    infolem.style.height = "auto";
     infolem.style.border = "3px solid black";
     //infolem.style.textAlign = "center";
     infolem.style.background = "rgba(255,255,255,0.8)";
-    infolem.style.marginLeft = "100px";
-    infolem.style.padding = "20px";
-    infolem.style.fontSize = "1.5em";
-
+    infolem.style.marginLeft = parseInt(100 * coef_x) + "px";
+    infolem.style.padding = parseInt(coef_y * 20)+ "px " + parseInt(coef_x * 20) + "px"; 
+    infolem.style.fontSize = (coef_x+coef_y) / 2 * 1.5 + "em";
     const textlem = document.createElement("div");
     textlem.id = "text";
     //textlem.innerText = text_60sec;
@@ -1333,11 +1414,11 @@ function create_start_and_info()
     startlem.id = "startBtn";
     startlem.onclick = new_game;
     startlem.innerText = "Поехали!";
-    startlem.style.marginLeft  = "200px";
-    startlem.style.marginTop = "200px";
+    startlem.style.marginLeft  = parseInt(coef_x * 200) + "px";
+    startlem.style.marginTop = parseInt(coef_y * 200) + "px";
     startlem.style.display = "block";
-    startlem.style.padding = "20px";
-    startlem.style.fontSize = "1.5em";
+    startlem.style.padding = parseInt(coef_y * 20)+ "px " + parseInt(coef_x * 20) + "px"; 
+    startlem.style.fontSize = (coef_x + coef_y) / 2 * 1.6 + "em";
     startlem.style.position = "relative";
     startlem.style.border = "3px solid black";
     startlem.style.background = "#a2f5b4";
@@ -1389,6 +1470,8 @@ function set_area()
     wind_lem.style.height = vk_height + "px";
     //wind_lem.style.border = "1px solid blue";
     wind_lem.style.background = "url('./images/back_900_750.jpg')";
+    wind_lem.style.backgroundRepeat = "no-repeat";
+    wind_lem.style.backgroundSize = "cover";
     document.body.appendChild(wind_lem);
 }
 
@@ -1403,11 +1486,15 @@ function new_game()
     const belem = document.getElementById("bonusBar");
     const player = document.getElementById("player");
     const pause = document.getElementById("pauseBtn");
+    const bc = document.getElementById("bonusCounter");
     if(regime == "peaceful")
     {
         const lifes = document.getElementById("lifesBar");
+        const lc = document.getElementById("lifesCounter");
         lifes.style.display = "block";
+        lc.style.display = "block";
     }
+    bc.style.display = "block";
     pause.style.display = "block";
     player.style.display = "block";
     player.style.opacity = "1.0";
@@ -1424,6 +1511,7 @@ function new_game()
     {
         var start_mis_id = setTimeout(init_missiles, mis_gen_speed*3);
     }
+    
     if(zero_atoms == 0)
         var start_bon_id = setTimeout(init_bonuses, bon_gen_speed);
     
@@ -1441,20 +1529,18 @@ function create_game_field()
     gf.id = "gameField";
     gf.style.position = "absolute";
     gf.style.display = "none";
-    gf.style.width = gf_width + "px";
+    gf.style.width = parseInt(coef_x * gf_width) + "px";
     gf.style.background  = "rgba(255, 255, 255, 0.8)";
-    gf.style.marginLeft = "30px";
-    gf.style.marginTop = "25px";
-    gf.style.height = gf_height + "px";
+    gf.style.marginLeft = parseInt(coef_x * 30) + "px";
+    gf.style.marginTop = parseInt(coef_y * 25) + "px";
+    gf.style.height = parseInt(coef_y * gf_height) + "px";
     gf.style.border = "5px solid black";
     gf.style.background = gf_color;
     wind.appendChild(gf);
 }
 
-function create_best_results()
-{
 
-}
+
 
 function create_clock()
 {
@@ -1463,11 +1549,11 @@ function create_clock()
     statlem.style.position = "absolute";
     statlem.style.width = "auto";
     statlem.innerText = "01:00";
-    statlem.style.marginLeft = "775px";
-    statlem.style.marginTop = "25px";
-    statlem.style.fontSize = "1.5em";
+    statlem.style.marginLeft = parseInt(coef_x * 775) + "px";
+    statlem.style.marginTop = parseInt(coef_y * 25) + "px";
+    statlem.style.fontSize = (coef_x + coef_y) / 2 * 1.5 + "em";
     statlem.style.border = "2px solid black";
-    statlem.style.padding = "5px";
+    statlem.style.padding = parseInt(coef_y * 5) +"px " + parseInt(coef_x * 5) + "px";
     statlem.style.background = "white";
     statlem.style.display = "none";
     const wind = document.getElementById("window");
@@ -1477,51 +1563,81 @@ function create_clock()
 
 function create_bonus_bar()
 {
+    /*
     const belem = document.createElement("div");
     belem.id = "bonusBar";
     belem.style.position = "absolute";
-    belem.style.marginLeft = "775px";
-    belem.style.padding = "10px";
+    belem.style.marginLeft = parseInt(coef_x * 775) + "px";
+    belem.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     belem.style.background = "url('./images/atom_icon.jpg')";
-    belem.style.width = "30px";
-    belem.style.height = "30px";
+    belem.style.width = parseInt(coef_x * 30) + "px";
+    belem.style.height = parseInt(coef_x * 30) + "px";
     belem.style.border = "2px solid black";
     belem.style.borderRadius = "50%";
-    belem.style.marginTop = "100px";
+    belem.style.marginTop = parseInt(coef_y * 100) + "px";
     const bc = document.createElement("div");
     bc.id = "bonusCounter";
-    bc.style.fontSize = "2.7em";
+    bc.style.fontSize = (coef_x + coef_y) / 2 * 2.7 + "em";
     belem.appendChild(bc);
     bc.style.position = "relative";
-    bc.style.marginLeft = "50px";
+    bc.style.marginLeft = parseInt(coef_x * 50) + "px";
     bc.innerText = "0";
     bc.style.verticalAlign = "middle";
-    bc.style.lineHeight =  "30px";
-    bc.style.paddingBottom = "5px";
+    bc.style.lineHeight =  parseInt(coef_y * 30) + "px";
+    bc.style.paddingBottom = parseInt(coef_y * 5) + "px";
     belem.style.display = "none";
     const wind = document.getElementById("window");
     wind.appendChild(belem);
+    */
+    const belem = document.createElement("div");
+    belem.id = "bonusBar";
+    belem.style.position = "absolute";
+    belem.style.marginLeft = parseInt(coef_x * 775) + "px";
+    belem.style.width = parseInt( 1.2*(coef_x + coef_y ) /2 * bonus_width) + "px";
+    belem.style.height = parseInt(1.2*(coef_x + coef_y ) /2 * bonus_height ) + "px";
+    belem.style.background = "url('./images/atom_icon.jpg')";
+
+    belem.style.backgroundSize = "cover";
+    belem.style.backgroundRepeat = "no-repeat";
+    belem.style.borderRadius = "50%";
+    belem.style.marginTop = parseInt(coef_y * 100) + "px";
+    const bc = document.createElement("div");
+    bc.id = "bonusCounter";
+    bc.style.position = "absolute";
+    bc.style.marginTop = parseInt(belem.style.marginTop) + parseInt(belem.style.height)  + "px";
+    bc.style.marginLeft = parseInt(belem.style.marginLeft) + 10 + "px";
+    bc.innerText = "0";
+    bc.style.fontSize = (coef_x + coef_y) * 1.2 + "em";
+    bc.style.display = "none";
+    belem.style.display = "none";
+    const wind = document.getElementById("window");
+    wind.appendChild(belem);
+    wind.appendChild(bc);
 }
 
 
 function create_player()
 {
+    const gf = document.getElementById("gameField");
     const player = document.createElement("div");
     player.id = "player";
     player.style.position = "absolute";
-    player.style.background = "url('images/open6.svg')";
-    player.style.width = player_width + "px";
-    player.style.height = player_height + "px";
-    player.style.marginTop = "595px";
+    player.style.background = "url('images/open7.svg')";
+    player.style.backgroundSize = "cover";
+    player.style.backgroundRepeat = "no-repeat";
+
+    player.style.width = parseInt((coef_x+coef_y)/2 * player_width) + "px";
+    player.style.height = parseInt((coef_y +coef_x) / 2* player_height)  + "px";
+    player.style.marginTop = (parseInt(gf.style.height) - parseInt(player.style.height)) + "px";
+    player.style.border = "none";
     player.style.marginLeft = "0";
-    player.style.display = "inline";
+    //player.style.display = "inline";
     player.onclick = player_clicked;
     player.onmousedown = player_catched;
     player.onmouseup = player_uncatched;
     player.ontouchstart = player_catched;
     player.ontouchend = player_uncatched;
     document.body.ontouchmove = mouse_moved;
-    const gf = document.getElementById("gameField");
     gf.appendChild(player);
 }
 
@@ -1614,30 +1730,34 @@ function mouse_moved(e)
     if(game_status == 1)
     {
         const player = document.getElementById("player");
+        const gf = document.getElementById("gameField");
+        var gf_w = parseInt(gf.style.width);
+        var gf_h = parseInt(gf.style.height);
+        var p_h = parseInt(player.style.height);
         if(player_active)
         {
             var nx1, nx2,ny1,ny2;
             var cx, cy;
             if(mobile_mode == 0)
             {
-                nx1 = e.clientX - 80;
-                ny1 = e.clientY - 60;
+                nx1 = e.clientX - parseInt(parseInt(player.style.width)*3/4);
+                ny1 = e.clientY - parseInt(parseInt(player.style.height)*3/4);
                 cx = e.clientX;
                 cy = e.clientY;
             }
             else
             {
-                nx1 = e.touches[0].clientX - 80;
-                ny1 = e.touches[0].clientY - 80;
+                nx1 = e.touches[0].clientX - parseInt(parseInt(player.style.width)*3/4);
+                ny1 = e.touches[0].clientY - parseInt(parseInt(player.style.height)*3/4);
                 cx = e.touches[0].clientX;
                 cy = e.touches[0].clientY;
             }
-            nx2 = nx1 + player_width;
-            ny2 = ny1 + player_height;
-
-            if(nx1 >= 0 && nx2 <= gf_width)
+            nx2 = nx1 + parseInt(player.style.width);
+            ny2 = ny1 + parseInt(player.style.height);
+            
+            if(nx1 >= 0 && nx2 <= gf_w)
             {
-                player.style.marginLeft = cx - 80 + "px";
+                player.style.marginLeft = cx - parseInt(parseInt(player.style.width)*3/4) + "px";
                 x1 = nx1;
                 x2 = nx2;
             }
@@ -1645,32 +1765,33 @@ function mouse_moved(e)
             {
                 player.style.marginLeft = "0";
                 x1 = 0;
-                x2 = player_width;
+                x2 = parseInt(player.style.width);
             }
-            else if(nx2 > gf_width)
+            else if(nx2 > gf_w)
             {
-                player.style.marginLeft = gf_width - player_width + "px";
-                x1 = gf_width - player_width;
-                x2 = gf_width;
+                player.style.marginLeft = gf_w - parseInt(player.style.width) + "px";
+                x1 = gf_w - parseInt(player.style.width);
+                x2 = gf_w;
             }
-            if(ny1 >= 0 && ny2 <= gf_height)
+            if(ny1 >= 0 && ny2 <= gf_h)
             {
-                player.style.marginTop = cy - 60 + "px";
-                y1 = gf_height - cy - 50;
-                y2 = y1 + player_height;
+                player.style.marginTop = cy - parseInt(parseInt(player.style.height)*3/4) + "px";
+                y2 = gf_h - parseInt(player.style.marginTop);
+                y1 = y2 - p_h;
             }
             else if(ny1 < 0)
             {
                 player.style.marginTop = "0";
-                y2 = gf_height;
-                y1 = y2 - player_height;
+                y2 = gf_h;
+                y1 = y2 - parseInt(player.style.height);
             }
-            else if(ny2 > gf_height)
+            else if(ny2 > gf_h)
             {
-                player.style.marginTop = player_mt0 + "px";
+                
+                player.style.marginTop = gf_h - p_h + "px";
                 y1 = 0;
-                y2 = player_height;
-
+                y2 = p_h;
+                
             }
         }
     }
@@ -1685,16 +1806,18 @@ function create_missiles()
     
     for(var i = 0; i < 100; i++)
     {
-    const mislem = document.createElement("div");
-    mislem.id = i+"m";
-    mislem.style.position = "absolute";
-    mislem.style.width = missile_width + "px";
-    mislem.style.marginLeft = i * missile_width + "px";
-    mislem.style.height = missile_height + "px";
-    mislem.style.background = "url('images/black_missile2.png')";
-    mislem.style.marginTop = "-100px";
-    gf.appendChild(mislem);
-    free_missiles.push(i+"m");
+        const mislem = document.createElement("div");
+        mislem.id = i+"m";
+        mislem.style.position = "absolute";
+        mislem.style.width = parseInt(coef_x * missile_width) + "px";
+        mislem.style.marginLeft = i * parseInt(coef_x * missile_width) + "px";
+        mislem.style.height = parseInt(coef_x * missile_height)  + "px";
+        mislem.style.background = "url('images/black_missile2.png')";
+        mislem.style.backgroundSize = "cover";
+        mislem.style.backgroundRepeat = "no-repeat";
+        mislem.style.marginTop = parseInt(coef_x * (-100)) + "px";
+        gf.appendChild(mislem);
+        free_missiles.push(i+"m");
     }
     
     gf.style.overflow = "hidden";
@@ -1714,12 +1837,14 @@ function create_bonuses()
         const bonlem = document.createElement("div");
         bonlem.id = i+"b";
         bonlem.style.position = "absolute";
-        bonlem.style.width = bonus_width + "px";
-        bonlem.style.marginLeft = i * bonus_width + "px";
-        bonlem.style.height = bonus_height + "px";
-        bonlem.style.background = "url('./images/atom_icon2.jpg')";
+        bonlem.style.width = parseInt(coef_x * bonus_width) + "px";
+        bonlem.style.marginLeft = i * parseInt(bonlem.style.width) + "px";
+        bonlem.style.height = bonlem.style.width;
+        bonlem.style.background = "url('./images/atom_icon32_32.jpg')";
+        bonlem.style.backgroundSize = "cover";
+        bonlem.style.backgroundRepeat = "no-repeat";
         bonlem.style.borderRadius = "50%";
-        bonlem.style.marginTop = "-40px";
+        bonlem.style.marginTop = -1*parseInt(bonlem.style.height) - 10 + "px";
         gf.appendChild(bonlem);
         free_bonuses.push(i+"b");
     }
@@ -1740,10 +1865,11 @@ function gen_bonuses()
     {
         var new_bon = free_bonuses.shift();
         const bonlem = document.getElementById(new_bon);
+        const gf = document.getElementById("gameField");
         bonus_step = max_v(3, parseInt(secs / 10));
-    
+        
         var salt = new Date();
-        var ml = parseInt(Math.random()*10000*(salt%4159))%(gf_width - bonus_width - 10);
+        var ml = parseInt(Math.random()*10000*(salt%4159))%(parseInt(gf.style.width) - parseInt(bonlem.style.width));
         bonlem.style.marginLeft = ml + "px";
         active_bonuses[new_bon] = 1;
         var bonus_id = setInterval(move_bonuses, bon_move_speed);
@@ -1766,7 +1892,7 @@ function gen_missiles()
         const mislem = document.getElementById(new_mis);
         var salt = new Date();
     
-        var ml = (parseInt(Math.random()*10000*(salt%4159))%(max_missiles)) * missile_width;
+        var ml = (parseInt(Math.random()*10000*(salt%4159))%(max_missiles)) * parseInt(mislem.style.width);
         mislem.style.marginLeft = ml + "px";
         missile_active[new_mis] = 1;
         //missile_step = max_v(1, parseInt(secs / 10));
@@ -1897,16 +2023,18 @@ function move_missiles()
 {
     if(game_status == 1)
     {
+        const gf = document.getElementById("gameField");
+        var gf_h = parseInt(gf.style.height);
         for(var mis_id in missile_active)
         {
             if(missile_active[mis_id] == 1)
             {
                 const mislem = document.getElementById(mis_id);
                 var mt = parseInt(mislem.style.marginTop);
-                var my1 = gf_height - mt;
+                var my1 = gf_h - mt;
                 var mx1 = parseInt(mislem.style.marginLeft);
-                var my2 = my1 - missile_height;
-                var mx2 = mx1 + missile_width;
+                var my2 = my1 - parseInt(mislem.style.height);
+                var mx2 = mx1 + parseInt(mislem.style.width);
                 if(mx1 >= x1 && mx1 <= x2 && my2 >= y1 && my2 <= y2 || 
                     mx2 >= x1 && mx2 <= x2 && my2 >= y1 && my2 <= y2)
                 {
@@ -1915,19 +2043,19 @@ function move_missiles()
                     //hide_pause_button();
                     display_lose_bar();
                 }
-                else if( mt + missile_step <= gf_height)
+                else if( mt + missile_step <= gf_h)
                 {
                     mislem.style.marginTop = mt + missile_step + "px";
                 }   
-                else if(mt < gf_height)
+                else if(mt < gf_h)
                 {
-                    mislem.style.marginTop = gf_height + "px";
+                    mislem.style.marginTop = gf_h + "px";
                 } 
-                else if(mt == gf_height)
+                else if(mt == gf_h)
                 {
                     clearInterval(missile_dict[mis_id]);
                     missile_active[mis_id] = 0;
-                    mislem.style.marginTop = start_mt_missile + "px";
+                    mislem.style.marginTop = -1*parseInt(mislem.style.height) + "px";
                     free_missiles.push(mis_id);
                 }
             }
@@ -1939,30 +2067,34 @@ function create_win_bar()
 {
     const winlem = document.createElement("div");
     winlem.id = "winBar";
-    winlem.style.marginLeft = "200px";
-    winlem.style.width = win_bar_width +30+ "px";
-    winlem.style.height = win_bar_height + "px";;
+    //winlem.style.marginLeft = parseInt(coef_x * 200) + "px";
+    //winlem.style.width = parseInt(coef_x * (win_bar_width +30)) + "px";
+    winlem.style.width = "60%"
+    winlem.style.marginLeft = "15%";
+    //winlem.style.height = parseInt(coef_y * win_bar_height) + "px";;
+    winlem.style.height = "auto";
     winlem.innerText = "Получилось!       ";
-    winlem.style.fontSize = "2em";
+    winlem.style.fontSize = (coef_x + coef_y) + "em";
     winlem.style.background = "#fff";
     winlem.style.border = "3px solid black";
-    winlem.style.padding = "10px";
+    winlem.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     winlem.style.textAlign = "center";
-    winlem.style.marginTop = "250px";
+    winlem.style.marginTop = parseInt(coef_y *250) + "px";
     winlem.style.position = "absolute";
     
     const mainlem = document.createElement("div");
     mainlem.id = "mainBtn";
     mainlem.style.position = "relative";
     mainlem.innerText = "В меню";
-    mainlem.style.width = parseInt(0.7 * win_bar_width) + "px";
-    mainlem.style.marginLeft = "10%";
+    mainlem.style.width = "80%";
+    //mainlem.style.width = parseInt(0.7 * win_bar_width) + "px";
+    mainlem.style.marginLeft = "8%";
     mainlem.onclick = display_main;
     mainlem.onmouseover = mouse_over_mainBtn;
     mainlem.onmouseout = mouse_out_mainBtn;
     mainlem.style.background = "#3e7";
-    mainlem.style.padding = "10px 10px ";
-    mainlem.style.marginTop = "30px";
+    mainlem.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
+    mainlem.style.marginTop = parseInt((coef_y + coef_x)/2 * 15) + "px";
     mainlem.style.height = "auto";
     mainlem.style.display = "block";
     mainlem.style.borderRadius = "5%";
@@ -1988,7 +2120,11 @@ function display_main()
     const info = document.getElementById("info");
     const sure = document.getElementById("sureBar");
     const lifes = document.getElementById("lifesBar");
+    const lc = document.getElementById("lifesCounter");
+    const bc = document.getElementById("bonusCounter");
     hide_stars();
+    bc.style.display = "none";
+    lc.style.display = "none";
     lifes.style.display = "none";
     sure.style.display = "none";
     info.style.display = "none";
@@ -2013,13 +2149,13 @@ function create_lose_bar()
     const rb = document.createElement("div");
     rb.id="loseBar";
     rb.style.position = "absolute";
-    rb.style.width = "auto";
+    rb.style.width = "50%";
     rb.style.height = "auto";
-    rb.style.marginLeft = "220px";
-    rb.style.fontSize = "2em";
-    rb.style.marginTop = "280px";
+    rb.style.marginLeft = parseInt(coef_x * 220) + "px";
+    rb.style.fontSize = (coef_x + coef_y) + "em";
+    rb.style.marginTop = parseInt(coef_y * 280) + "px";
     
-    rb.style.padding = "20px";
+    rb.style.padding = parseInt(coef_y * 20) + "px " + parseInt(coef_x * 20) + "px";
     rb.style.border = "3px solid black";
     rb.style.fontFamily = "Open Sans";
     rb.innerText = "Не вышло... Пробуем ещё?\n";
@@ -2030,18 +2166,18 @@ function create_lose_bar()
     yeslem.style.position = "relative";
     yeslem.innerText = "Да";
     yeslem.style.verticalAlign = "middle";
-    yeslem.style.fontSize = "1.3em";
-    yeslem.style.marginTop = "20px";
+    yeslem.style.fontSize = (coef_x + coef_y ) / 2 * 1.3 + "em";
+    yeslem.style.marginTop = parseInt(coef_y * 20) + "px";
     yeslem.style.background = "#3c3";
-    yeslem.style.width = "30%";
+    yeslem.style.width = "60%";
     yeslem.style.display  = "block";
     yeslem.style.height = "auto";
     //yeslem.style.margin = "auto";
-    yeslem.style.padding = "10px 20px";
+    yeslem.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 20) + "px";
     yeslem.style.textAlign = "center";
     yeslem.style.verticalAlign = "middle";
     yeslem.style.borderRadius = "5%";
-    yeslem.style.marginLeft = "25%";
+    yeslem.style.marginLeft = "15%";
     yeslem.onmouseover = mouse_over_choice;
     yeslem.onmouseout = mouse_out_choice;
     yeslem.onclick = restart;
@@ -2104,13 +2240,13 @@ function set_default()
         lc.innerText = "x3";
     }
     zero_atoms = 0;
-    player.style.marginTop = player_mt0 + "px";
+    player.style.marginTop = (parseInt(gf.style.height) - parseInt(player.style.height)) + "px";
     player.style.marginLeft = "0px";
     player_lifes = 3;
     x1 = 0;
-    x2 = x1 + player_width;
+    x2 = x1 + parseInt(player.style.width);
     y1 = 0;
-    y2 = y1 + player_height;
+    y2 = y1 + parseInt(player.style.height);
     bonus_counter = 0;
     const bonuslem = document.getElementById("bonusCounter");
     bonuslem.innerText = "0";
@@ -2131,13 +2267,13 @@ function set_default()
     {
         missile_active[mis_id] = 0;
         const mislem = document.getElementById(mis_id);
-        mislem.style.marginTop = start_mt_missile + "px";
+        mislem.style.marginTop = -1*parseInt(mislem.style.height) + "px";
     }
     for(var bon_id in active_bonuses)
     {
         active_bonuses[bon_id] = 0;
         const bonlem = document.getElementById(bon_id);
-        bonlem.style.marginTop = start_mt_bonus + "px";
+        bonlem.style.marginTop = -1*parseInt(bonlem.style.height) + "px";
     }
     free_bonuses = [];
     free_missiles = [];
@@ -2189,17 +2325,18 @@ function move_bonuses()
 {
     if(game_status == 1)
     {
-    
+        const gf = document.getElementById("gameField");
+        var gf_h = parseInt(gf.style.height);
         for(var key in active_bonuses)
         {
             if(active_bonuses[key] == 1)
             {
                 const bonlem = document.getElementById(key);
                 var mt = parseInt(bonlem.style.marginTop);
-                var by1 = gf_height - mt;
+                var by1 = parseInt(gf.style.height) - mt;
                 var bx1 = parseInt(bonlem.style.marginLeft);
-                var by2 = by1 - bonus_height;
-                var bx2 = bx1 + bonus_width;
+                var by2 = by1 - parseInt(bonlem.style.height);
+                var bx2 = bx1 + parseInt(bonlem.style.width);
             
                 if(bx1 >= x1 && bx1 <= x2 && by2 >= y1 && by2 <= y2 || 
                     bx2 >= x1 && bx2 <= x2 && by2 >= y1 && by2 <= y2)
@@ -2209,23 +2346,23 @@ function move_bonuses()
                     bonus_counter += 1;
                     bb.innerText = bonus_counter;
                     active_bonuses[key] = 0;
-                    bonlem.style.marginTop = start_mt_bonus + "px";
+                    bonlem.style.marginTop = -1* parseInt(bonlem.style.height) + "px";
                     free_bonuses.push(key);
                     clearInterval(bonus_dict[key]);
                 }
-                else if( mt + bonus_step <= gf_height)
+                else if( mt + bonus_step <= gf_h)
                 {
                     bonlem.style.marginTop = mt + bonus_step + "px";
                 }   
-                else if(mt < gf_height)
+                else if(mt < gf_h)
                 {
-                    bonlem.style.marginTop = gf_height + "px";
+                    bonlem.style.marginTop = gf_h + "px";
                 } 
-                else if(mt == gf_height)
+                else if(mt == gf_h)
                 {
                     clearInterval(bonus_dict[key]);
                     active_bonuses[key] = 0;
-                    bonlem.style.marginTop = start_mt_bonus + "px";
+                    bonlem.style.marginTop = -1*parseInt(bonlem.style.height) + "px";
                     free_bonuses.push(key);
                     if(regime == "peaceful")
                     {
