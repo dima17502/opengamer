@@ -150,14 +150,15 @@ var open_levels = {1:1,2:0, 3:0, 4:0};
 var open_plevels = {1:1, 2:0, 3:0, 4:0};
 var cookie_lifetime = 8640000;
 var level_colors = ["#3e7","#39f","#e37","orange"];
-
+var ac_token = "";
 main();
 
 
 function main()
 {
     date3 = new Date();
-    get_access_token();
+    //get_access_token();
+
     adaptate();
     set_area();                 //
     create_ad_warning();
@@ -200,6 +201,7 @@ function get_access_token()
         .then((data) => { 
           if (data.access_token) {
             alert(data.access_token);
+            ac_token = data.access_token;
         }
         })
         .catch((error) => {
@@ -208,6 +210,7 @@ function get_access_token()
           console.log(error);
         });
 }
+
 
 function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
@@ -249,14 +252,9 @@ function getCookie(name) {
 
 function get_cookies()
 {
-    var cookie = getCookie("opengamer");
-    if(cookie == undefined)
-    {
-        open_levels = {1:1,2:0, 3:0, 4:0};
-        open_plevels = {1:1, 2:0, 3:0, 4:0};
-        star_dict = {1:0,2:0,3:0, 4:0};
-    }
-    else
+    var cookie = localStorage.getItem("opengamer");
+    //localStorage.removeItem("opengamer");
+    if(cookie)
     {
         for(var i = 0; i < 4; i++)
         {
@@ -273,6 +271,12 @@ function get_cookies()
         for(var i = 8; i < 12; i++)
             star_dict[i%4 + 1] = parseInt(cookie[i]);
     }
+    else
+    {
+        open_levels = {1:1,2:0, 3:0, 4:0};
+        open_plevels = {1:1, 2:0, 3:0, 4:0};
+        star_dict = {1:0,2:0,3:0, 4:0};
+    }
 }
 
 function update_cookies()
@@ -285,7 +289,8 @@ function update_cookies()
         cookies += open_plevels[i].toString();
     for(var i in star_dict)
         cookies += star_dict[i].toString();
-    setCookie("opengamer", cookies, {'max-age': cookie_lifetime});
+
+    localStorage.setItem("opengamer", cookies);
     //alert([peaceful_available, available_lvl]);
 
 }
