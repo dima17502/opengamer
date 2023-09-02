@@ -204,7 +204,7 @@ function get_access_token()
         })
         .catch((error) => {
           // Ошибка
-          alert('error');
+          alert('error2');
           console.log(error);
         });
 }
