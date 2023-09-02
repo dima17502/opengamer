@@ -28,7 +28,6 @@
 
       -  ракеты подвисают пизда
       -анимация отображается во время а не после рекламы
-      - куки не сохраняются в вк
 
 */
 import bridge from '@vkontakte/vk-bridge';
@@ -106,7 +105,7 @@ var num_to_level = {1:"easy", 2:"medium", 3:"hard", 4:"custom"};
 var level_options = {1: 423, 2:173, 3:149};
 var plevel_options = {1: 332, 2:267, 3:233};
 var current_lvl = 1;
-var win_time = 5;
+var win_time = 60;
 var pause_width = 60;
 var pause_height = 60;
 var home_width =   62;
