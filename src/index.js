@@ -195,7 +195,7 @@ function get_access_token()
 {
     bridge.send('VKWebAppGetAuthToken', { 
         app_id: 51733971, 
-        scope: 'offline'
+        scope: ''
         })
         .then((data) => { 
           if (data.access_token) {
