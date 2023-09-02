@@ -27,6 +27,8 @@
         - после "пробуем еще?" нужно добавить кнопку в Меню, дизайн взять с элемента yessure
 
       -  ракеты подвисают пизда
+      -анимация отображается во время а не после рекламы
+      - куки не сохраняются в вк
 
 */
 import bridge from '@vkontakte/vk-bridge';
@@ -155,7 +157,7 @@ main();
 function main()
 {
     date3 = new Date();
-    
+    get_access_token();
     adaptate();
     set_area();                 //
     create_ad_warning();
@@ -186,6 +188,25 @@ function main()
     //deleteCookie("opengamer");
     get_cookies();
     update_levels();
+}
+
+
+function get_access_token()
+{
+    bridge.send('VKWebAppGetAuthToken', { 
+        app_id: 51733971, 
+        scope: 'offline'
+        })
+        .then((data) => { 
+          if (data.access_token) {
+            alert(data.access_token);
+        }
+        })
+        .catch((error) => {
+          // Ошибка
+          alert('error');
+          console.log(error);
+        });
 }
 
 function getCookie(name) {
