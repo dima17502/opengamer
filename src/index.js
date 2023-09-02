@@ -21,16 +21,13 @@
 
 
         Допилить
-        - показ рекламы после попытки перед новой
-        - при зажатом курсоре если немного повертеть игрок открепляется     
-        -  верстка: при mouseoverlevel смещать на border-width вниз starBarб а на out наоборот
-
-      !!!!!!  - проверка на adblock, если рекламы нет - ad_time = 0; или попросить пользователя выключить блокировщик рекламы
-
-      - сделать мобильную версию, найти ивент под mouse touch
+        - 
 
         -научиться делать куки, и загружаться из кук пользователя сохраняя результаты
         - после "пробуем еще?" нужно добавить кнопку в Меню, дизайн взять с элемента yessure
+
+      -  ракеты подвисают пизда
+
 */
 import bridge from '@vkontakte/vk-bridge';
 bridge.send("VKWebAppInit", {});
@@ -107,7 +104,7 @@ var num_to_level = {1:"easy", 2:"medium", 3:"hard", 4:"custom"};
 var level_options = {1: 423, 2:173, 3:149};
 var plevel_options = {1: 332, 2:267, 3:233};
 var current_lvl = 1;
-var win_time = 60;
+var win_time = 5;
 var pause_width = 60;
 var pause_height = 60;
 var home_width =   62;
@@ -121,7 +118,6 @@ var peaceful_available = 1;
 var temp_lvl = 1;
 var star_width = 40;
 var star_height = 40;
-var star_dict = {1:0,2:0,3:0, 4:0};
 var gray_path_value = "url('./images/star_icon_gray2.svg')";
 var gold_path_value = "url('./images/star_icon3.svg')";
 var change1_id = 0;
@@ -147,7 +143,11 @@ if(mobile_mode == 0)
 }
 var coef_x = parseFloat(parseInt(vk_width)  / 900);
 var coef_y = parseFloat(parseInt(vk_height)  / 750);
-
+var star_dict = {1:0,2:0,3:0, 4:0};
+var open_levels = {1:1,2:0, 3:0, 4:0};
+var open_plevels = {1:1, 2:0, 3:0, 4:0};
+var cookie_lifetime = 8640000;
+var level_colors = ["#3e7","#39f","#e37","orange"];
 
 main();
 
@@ -183,9 +183,91 @@ function main()
     create_stars();             //
     create_audio_button();      //
     check_ad();
-
+    //deleteCookie("opengamer");
+    get_cookies();
+    update_levels();
 }
 
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
+
+  function setCookie(name, value, options = {}) {
+
+    options = {
+      path: '/',
+      // при необходимости добавьте другие значения по умолчанию
+      ...options
+    };
+  
+    if (options.expires instanceof Date) {
+      options.expires = options.expires.toUTCString();
+    }
+  
+    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+  
+    for (let optionKey in options) {
+      updatedCookie += "; " + optionKey;
+      let optionValue = options[optionKey];
+      if (optionValue !== true) {
+        updatedCookie += "=" + optionValue;
+      }
+    }
+  
+    document.cookie = updatedCookie;
+  }
+
+  function deleteCookie(name) {
+    setCookie(name, "", {
+      'max-age': -1
+    })
+  }
+
+function get_cookies()
+{
+    var cookie = getCookie("opengamer");
+    if(cookie == undefined)
+    {
+        open_levels = {1:1,2:0, 3:0, 4:0};
+        open_plevels = {1:1, 2:0, 3:0, 4:0};
+        star_dict = {1:0,2:0,3:0, 4:0};
+    }
+    else
+    {
+        for(var i = 0; i < 4; i++)
+        {
+            open_levels[i + 1] = parseInt(cookie[i]);
+            if(open_levels[i+1] == 1)
+                available_lvl = i%4 + 1;
+        }
+        for(var i = 4; i < 8; i++)
+        {
+            open_plevels[i % 4 + 1] = parseInt(cookie[i]);
+            if(open_plevels[i%4+1] == 1)
+                peaceful_available = i%4 + 1;
+        }
+        for(var i = 8; i < 12; i++)
+            star_dict[i%4 + 1] = parseInt(cookie[i]);
+    }
+}
+
+function update_cookies()
+{
+    // level plevel stars
+    var cookies = "";
+    for(var i in open_levels)
+        cookies += open_levels[i].toString();
+    for(var i in open_plevels)
+        cookies += open_plevels[i].toString();
+    for(var i in star_dict)
+        cookies += star_dict[i].toString();
+    setCookie("opengamer", cookies, {'max-age': cookie_lifetime});
+    //alert([peaceful_available, available_lvl]);
+
+}
 function adaptate()
 {
     //alert([s_width, s_height]);
@@ -1177,6 +1259,7 @@ function level_chosen(event)
         temp_lvl = peaceful_available;
     if(level_dict[lvl.id] > temp_lvl)
     {
+        //alert([temp_lvl, available_lvl, level_dict[lvl.id]]);
         const warn = document.getElementById("warning");
         warn.style.display = "block";
     }
@@ -1968,20 +2051,14 @@ function change_time()
         if(temp_lvl == current_lvl && current_lvl != 4)
         {
             temp_lvl += 1;
-            //alert(1);
-            var temp_lvl_id = num_to_level[temp_lvl];
             if(regime == "peaceful")
-                temp_lvl_id = "p" + temp_lvl_id;
-            const next_lvl = document.getElementById(temp_lvl_id);
-            //alert(next_lvl.id);
-            if(temp_lvl == 2)
-                next_lvl.style.background = "#39f";
-            else if(temp_lvl == 3)
-                next_lvl.style.background = "#e37";
-            else if(temp_lvl == 4)
             {
-                next_lvl.style.background = "orange";
+                open_plevels[temp_lvl] = 1;
             }
+            else
+                open_levels[temp_lvl] = 1;
+            update_levels();
+
         }
         if(regime == "peaceful")
             peaceful_available = temp_lvl;
@@ -1993,9 +2070,30 @@ function change_time()
             if(player_lifes > star_dict[current_lvl])
                 star_dict[current_lvl] = player_lifes;
         }
+        update_cookies();
         display_win_bar();
     }
 }
+function update_levels()
+{
+    for(var i = 0; i < 4; i++)
+    {
+        const lvl = document.getElementById(num_to_level[i + 1]);
+        if(open_levels[i+1] == 1)
+            lvl.style.background = level_colors[i];
+        else
+            lvl.style.background = "#777";
+    }
+    for(var i = 0; i < 4; i++)
+    {
+        const lvl = document.getElementById("p" + num_to_level[i + 1]);
+        if(open_plevels[i+1] == 1)
+            lvl.style.background = level_colors[i];
+        else
+            lvl.style.background = "#777";
+    }
+}
+
 function hide_pause_button()
 {
     const pause = document.getElementById("pauseBtn");
@@ -2098,6 +2196,7 @@ function create_win_bar()
     mainlem.style.height = "auto";
     mainlem.style.display = "block";
     mainlem.style.borderRadius = "5%";
+    mainlem.style.marginBottom = "5px";
 
     winlem.style.display = "none";
     winlem.appendChild(mainlem);
