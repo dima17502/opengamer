@@ -212,7 +212,7 @@ function get_cookies()
 
             if(cookie)
             {
-                alert(1);
+                //alert(1);
 
                 for(var i = 0; i < 4; i++)
                 {
@@ -2113,8 +2113,8 @@ function change_time()
 function update_levels()
 {
 
-    alert('from update');
-    alert(Object.values(open_levels));
+    //alert('from update');
+    //alert(Object.values(open_levels));
     for(var i = 0; i < 4; i++)
     {
         const lvl = document.getElementById(num_to_level[i + 1]);
