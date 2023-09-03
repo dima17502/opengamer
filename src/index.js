@@ -186,6 +186,7 @@ function main()
     create_audio_button();      //
     check_ad();
     //deleteCookie("opengamer");
+    update_cookies();
     get_cookies();
     update_levels();
 }
@@ -202,6 +203,8 @@ function get_cookies()
         ]})
         .then((data) => { 
           if (data.keys) {
+            alert(data.keys[0].key);
+            alert(data.keys[0].value);
             /*
             var cookie = data.keys[0].value;
             alert(cookie);
@@ -258,7 +261,7 @@ function get_cookies()
         star_dict = {1:0,2:0,3:0, 4:0};
     }
     */
-   alert(promise1.keys[0]['value']);
+  // alert(promise1.keys[0]['value']);
 }
 
 function update_cookies()
