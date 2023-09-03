@@ -186,7 +186,7 @@ function main()
     create_audio_button();      //
     check_ad();
     //deleteCookie("opengamer");
-    update_cookies();
+    //update_cookies();
     get_cookies();
     update_levels();
 }
@@ -2128,7 +2128,8 @@ function hide_pause_button()
 }
 function display_win_bar()
 {
-    show_ad();
+    if (regime == "survival")
+        show_ad();
     const gf = document.getElementById("gameField");
     const winbar = document.getElementById("winBar");
     gf.style.opacity = "0.5";
