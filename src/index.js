@@ -112,7 +112,7 @@ var home_width =   62;
 var home_height = 62;
 var heart_width = 56;       // 35 * 28
 var heart_height = 48;
-var text_60sec = "Продержитесь 60 секунд уворачиваясь от ракет \n Управление стрелками / клавишами 'wasd' / зажатым курсором или пальцем. \nПауза - пробел \nУдачи!";
+var text_60sec = "Продержитесь 60 секунд уворачиваясь от ракет \n Управление перетаскиванием персонажа /стрелками' / зажатым курсором или пальцем. \nПауза - пробел \nУдачи!";
 var text_peaceful = "Ловите атомы в течение минуты, до того как они упадут на землю. \nУ вас 3 жизни. \nУправление зажатым курсором, пальцем, клавишами 'wasd'. \nПауза - пробел. Удачи!";
 var player_lifes = 3;
 var peaceful_available = 1;
@@ -191,66 +191,41 @@ function main()
 }
 
 
-function get_access_token()
-{
-    bridge.send('VKWebAppGetAuthToken', { 
-        app_id: 51733971, 
-        scope: ''
-        })
-        .then((data) => { 
-          if (data.access_token) {
-            alert(data.access_token);
-            ac_token = data.access_token;
-        }
-        })
-        .catch((error) => {
-          // Ошибка
-          alert('error2');
-          console.log(error);
-        });
-}
 
-
-function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-  }
-
-  function setCookie(name, value, options = {}) {
-
-    options = {
-      path: '/',
-      // при необходимости добавьте другие значения по умолчанию
-      ...options
-    };
-  
-    if (options.expires instanceof Date) {
-      options.expires = options.expires.toUTCString();
-    }
-  
-    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-  
-    for (let optionKey in options) {
-      updatedCookie += "; " + optionKey;
-      let optionValue = options[optionKey];
-      if (optionValue !== true) {
-        updatedCookie += "=" + optionValue;
-      }
-    }
-  
-    document.cookie = updatedCookie;
-  }
-
-  function deleteCookie(name) {
-    setCookie(name, "", {
-      'max-age': -1
-    })
-  }
 
 function get_cookies()
 {
+    bridge.send('VKWebAppStorageGet', {
+        keys: [
+          'opengamer'
+        ]})
+        .then((data) => { 
+          if (data.keys) {
+            var cookie = data.keys[0];
+            for(var i = 0; i < 4; i++)
+            {
+                open_levels[i + 1] = parseInt(cookie[i]);
+                if(open_levels[i+1] == 1)
+                    available_lvl = i%4 + 1;
+            }
+            for(var i = 4; i < 8; i++)
+            {
+                open_plevels[i % 4 + 1] = parseInt(cookie[i]);
+                if(open_plevels[i%4+1] == 1)
+                    peaceful_available = i%4 + 1;
+            }
+            for(var i = 8; i < 12; i++)
+                star_dict[i%4 + 1] = parseInt(cookie[i]);
+          }
+        })
+        .catch((error) => {
+            open_levels = {1:1,2:0, 3:0, 4:0};
+            open_plevels = {1:1, 2:0, 3:0, 4:0};
+            star_dict = {1:0,2:0,3:0, 4:0};
+        });
+
+
+    /*
     var cookie = localStorage.getItem("opengamer");
     //localStorage.removeItem("opengamer");
     if(cookie)
@@ -276,6 +251,7 @@ function get_cookies()
         open_plevels = {1:1, 2:0, 3:0, 4:0};
         star_dict = {1:0,2:0,3:0, 4:0};
     }
+    */
 }
 
 function update_cookies()
@@ -289,9 +265,20 @@ function update_cookies()
     for(var i in star_dict)
         cookies += star_dict[i].toString();
 
-    localStorage.setItem("opengamer", cookies);
-    //alert([peaceful_available, available_lvl]);
-
+    //localStorage.setItem("opengamer", cookies);
+    bridge.send('VKWebAppStorageSet', {
+        key: 'opengamer',
+        value: cookies
+       })
+       .then((data) => { 
+         if (data.result) {
+           // Значение переменной задано
+         }
+       })
+       .catch((error) => {
+         // Ошибка
+         console.log(error);
+       });
 }
 function adaptate()
 {
