@@ -197,13 +197,14 @@ function main()
 function get_cookies()
 {
     var success = 0;
+    var cookie;
     const promise1 = bridge.send('VKWebAppStorageGet', {
         keys: [
           'opengamer'
         ]})
         .then((data) => { 
           if (data.keys) {
-            var cookie = data.keys[0].value;
+             cookie = data.keys[0].value;
             if(cookie)
             {
 
@@ -237,7 +238,7 @@ function get_cookies()
            
            
         });
-
+        alert([cookie, open_levels, open_plevels])
 
     /*
     var cookie = localStorage.getItem("opengamer");
@@ -2103,6 +2104,8 @@ function change_time()
 }
 function update_levels()
 {
+
+    alert(open_levels);
     for(var i = 0; i < 4; i++)
     {
         const lvl = document.getElementById(num_to_level[i + 1]);
