@@ -199,38 +199,43 @@ function get_cookies()
     var success = 0;
     const promise1 = bridge.send('VKWebAppStorageGet', {
         keys: [
-          'opengamersss'
+          'opengamer'
         ]})
         .then((data) => { 
           if (data.keys) {
-            alert(data.keys[0].key);
-            alert(data.keys[0].value);
-            /*
             var cookie = data.keys[0].value;
-            alert(cookie);
-            for(var i = 0; i < 4; i++)
+            if(cookie)
             {
-                open_levels[i + 1] = parseInt(cookie[i]);
-                if(open_levels[i+1] == 1)
-                    available_lvl = i%4 + 1;
+
+                for(var i = 0; i < 4; i++)
+                {
+                    open_levels[i + 1] = parseInt(cookie[i]);
+                    if(open_levels[i+1] == 1)
+                        available_lvl = i%4 + 1;
+                }
+                for(var i = 4; i < 8; i++)
+                {
+                    open_plevels[i % 4 + 1] = parseInt(cookie[i]);
+                    if(open_plevels[i%4+1] == 1)
+                        peaceful_available = i%4 + 1;
+                }
+                for(var i = 8; i < 12; i++)
+                    star_dict[i%4 + 1] = parseInt(cookie[i]);
             }
-            for(var i = 4; i < 8; i++)
+            else
             {
-                open_plevels[i % 4 + 1] = parseInt(cookie[i]);
-                if(open_plevels[i%4+1] == 1)
-                    peaceful_available = i%4 + 1;
+                open_levels = {1:1,2:0, 3:0, 4:0};
+                open_plevels = {1:1, 2:0, 3:0, 4:0};
+                star_dict = {1:0,2:0,3:0, 4:0};
             }
-            for(var i = 8; i < 12; i++)
-                star_dict[i%4 + 1] = parseInt(cookie[i]);
-            */
            success = 1;
           }
         })
         .catch((error) => {
-            alert(2);
-            open_levels = {1:1,2:0, 3:0, 4:0};
-            open_plevels = {1:1, 2:0, 3:0, 4:0};
-            star_dict = {1:0,2:0,3:0, 4:0};
+            //alert(2);
+           
+           
+           
         });
 
 
@@ -283,7 +288,6 @@ function update_cookies()
        .then((data) => { 
          if (data.result) {
            // Значение переменной задано
-           alert(3);
          }
        })
        .catch((error) => {
