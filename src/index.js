@@ -201,8 +201,7 @@ function get_cookies()
         ]})
         .then((data) => { 
           if (data.keys) {
-            var cookie = data.keys[0];
-            alert(data.keys);
+            var cookie = data.keys[0].value;
             alert(cookie);
             for(var i = 0; i < 4; i++)
             {
