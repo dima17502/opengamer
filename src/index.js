@@ -205,8 +205,13 @@ function get_cookies()
         .then((data) => { 
           if (data.keys) {
              cookie = data.keys[0].value;
+             alert(cookie);
+             alert(Object.values(data.keys[0]));
+             alert(Object.keys(data.keys[0]));
+
             if(cookie)
             {
+                alert(1);
 
                 for(var i = 0; i < 4; i++)
                 {
@@ -238,7 +243,8 @@ function get_cookies()
            
            
         });
-        alert([cookie, open_levels, open_plevels])
+        alert([Object.values(cookie), Object.values(open_levels), Object.values(open_plevels)]);
+
 
     /*
     var cookie = localStorage.getItem("opengamer");
@@ -2105,7 +2111,7 @@ function change_time()
 function update_levels()
 {
 
-    alert(open_levels);
+    alert(Object.values(open_levels));
     for(var i = 0; i < 4; i++)
     {
         const lvl = document.getElementById(num_to_level[i + 1]);
