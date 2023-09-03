@@ -2111,6 +2111,7 @@ function change_time()
 function update_levels()
 {
 
+    alert('from update');
     alert(Object.values(open_levels));
     for(var i = 0; i < 4; i++)
     {
