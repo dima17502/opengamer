@@ -199,7 +199,7 @@ function get_cookies()
     var success = 0;
     const promise1 = bridge.send('VKWebAppStorageGet', {
         keys: [
-          'opengamer'
+          'opengamersss'
         ]})
         .then((data) => { 
           if (data.keys) {
