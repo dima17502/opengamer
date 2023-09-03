@@ -258,7 +258,7 @@ function get_cookies()
         star_dict = {1:0,2:0,3:0, 4:0};
     }
     */
-   alert(promise1.keys[0]['value'])
+   alert(promise1.keys[0]['value']);
 }
 
 function update_cookies()
