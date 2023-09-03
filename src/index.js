@@ -243,7 +243,7 @@ function get_cookies()
            
            
         });
-        alert([Object.values(cookie), Object.values(open_levels), Object.values(open_plevels)]);
+        alert([Object.values(open_levels), Object.values(open_plevels)]);
 
 
     /*
