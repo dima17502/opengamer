@@ -150,6 +150,8 @@ var open_plevels = {1:1, 2:0, 3:0, 4:0};
 var cookie_lifetime = 8640000;
 var level_colors = ["#3e7","#39f","#e37","orange"];
 var ac_token = "";
+get_cookies();
+
 main();
 
 
@@ -187,7 +189,6 @@ function main()
     check_ad();
     //deleteCookie("opengamer");
     //update_cookies();
-    get_cookies();
     update_levels();
 }
 
