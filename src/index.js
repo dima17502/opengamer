@@ -202,6 +202,8 @@ function get_cookies()
         .then((data) => { 
           if (data.keys) {
             var cookie = data.keys[0];
+            alert(data.keys);
+            alert(cookie);
             for(var i = 0; i < 4; i++)
             {
                 open_levels[i + 1] = parseInt(cookie[i]);
@@ -219,6 +221,7 @@ function get_cookies()
           }
         })
         .catch((error) => {
+            alert(2);
             open_levels = {1:1,2:0, 3:0, 4:0};
             open_plevels = {1:1, 2:0, 3:0, 4:0};
             star_dict = {1:0,2:0,3:0, 4:0};
@@ -273,6 +276,7 @@ function update_cookies()
        .then((data) => { 
          if (data.result) {
            // Значение переменной задано
+           alert(3);
          }
        })
        .catch((error) => {
