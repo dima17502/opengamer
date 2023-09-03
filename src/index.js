@@ -195,12 +195,14 @@ function main()
 
 function get_cookies()
 {
-    bridge.send('VKWebAppStorageGet', {
+    var success = 0;
+    const promise1 = bridge.send('VKWebAppStorageGet', {
         keys: [
           'opengamer'
         ]})
         .then((data) => { 
           if (data.keys) {
+            /*
             var cookie = data.keys[0].value;
             alert(cookie);
             for(var i = 0; i < 4; i++)
@@ -217,6 +219,8 @@ function get_cookies()
             }
             for(var i = 8; i < 12; i++)
                 star_dict[i%4 + 1] = parseInt(cookie[i]);
+            */
+           success = 1;
           }
         })
         .catch((error) => {
@@ -254,6 +258,7 @@ function get_cookies()
         star_dict = {1:0,2:0,3:0, 4:0};
     }
     */
+   alert(promise1.keys[0]['value'])
 }
 
 function update_cookies()
