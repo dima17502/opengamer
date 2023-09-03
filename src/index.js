@@ -23,11 +23,22 @@
         Допилить
         - 
 
-        -научиться делать куки, и загружаться из кук пользователя сохраняя результаты
         - после "пробуем еще?" нужно добавить кнопку в Меню, дизайн взять с элемента yessure
 
       -  ракеты подвисают пизда
       -анимация отображается во время а не после рекламы
+
+
+
+      - в случае победы 
+      - убрать в режиме вспышка сверху бонус бар и полет бонусов 
+      - установить move_speed в 11 для bonus_move и missile move, скорректировать bonus и missile step
+      - простой уровень в peaceful режиме сделать попроще, замедлить бонусы
+      - подредачить инфо: написать 1 пропущенный атом -1 жизнь, У вас 3 жизни
+      - сделать 2 инфо:  для тех кто с телефона и с компа
+      - бонусы для телефона увеличить в 1,5 раза
+      - установить локер на закрытые уровни
+      - управление стрелками и кнопками улучшить, увеличить шаг
 
 */
 import bridge from '@vkontakte/vk-bridge';
@@ -1134,7 +1145,7 @@ function create_warning()
     const warn = document.createElement("div");
     warn.innerText = "Сначала пройдите предыдущий уровень";
     warn.style.fontSize = (coef_x + coef_y)+ "em";
-    warn.style.background = "#fff";
+    warn.style.background = "rgba(255,255,255, 0.8)";
     warn.style.border = "3px solid black";
     warn.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     warn.style.textAlign = "center";
@@ -1145,7 +1156,6 @@ function create_warning()
     warn.style.height = parseInt(coef_y * warning_height) + "px";
     warn.style.marginTop = parseInt(coef_y * 200) + "px";
     warn.style.position = "relative";
-    
     const ok = document.createElement("div");
     ok.id = "okBtn";
     ok.style.position = "absolute";
@@ -1612,14 +1622,15 @@ function new_game()
         const lc = document.getElementById("lifesCounter");
         lifes.style.display = "block";
         lc.style.display = "block";
+        belem.style.display = "block";
+        bc.style.display = "block";
+
     }
-    bc.style.display = "block";
     pause.style.display = "block";
     player.style.display = "block";
     player.style.opacity = "1.0";
     set_body();
     statlem.style.display = "block";
-    belem.style.display = "block";
     infolem.style.display = "none";
     gf.style.background  = "rgba(255, 255, 255, 0.8)";
     gf.style.display = "block";
@@ -1631,7 +1642,7 @@ function new_game()
         var start_mis_id = setTimeout(init_missiles, mis_gen_speed*3);
     }
     
-    if(zero_atoms == 0)
+    if(zero_atoms == 0 && regime == "peaceful")
         var start_bon_id = setTimeout(init_bonuses, bon_gen_speed);
     
 }
@@ -1957,6 +1968,8 @@ function create_bonuses()
         bonlem.id = i+"b";
         bonlem.style.position = "absolute";
         bonlem.style.width = parseInt(coef_x * bonus_width) + "px";
+        if(mobile_mode == 1)
+            bonlem.style.width = parseInt((coef_x + coef_y) /2 * bonus_width)  + "px"
         bonlem.style.marginLeft = i * parseInt(bonlem.style.width) + "px";
         bonlem.style.height = bonlem.style.width;
         bonlem.style.background = "url('./images/atom_icon32_32.jpg')";
@@ -1985,7 +1998,10 @@ function gen_bonuses()
         var new_bon = free_bonuses.shift();
         const bonlem = document.getElementById(new_bon);
         const gf = document.getElementById("gameField");
-        bonus_step = max_v(3, parseInt(secs / 10));
+        var max_step = current_lvl;
+        if(current_lvl == 4)
+            max_step = 1;
+        bonus_step = max_v(max_step, parseInt(secs / 15));
         
         var salt = new Date();
         var ml = parseInt(Math.random()*10000*(salt%4159))%(parseInt(gf.style.width) - parseInt(bonlem.style.width));
@@ -2424,7 +2440,7 @@ function set_default()
     missile_dict = {};
     missile_active = {};
     active_bonuses = {};
-    mis_move_speed = 19;
+    mis_move_speed = 11;
 }
 function check_ad()
 {
