@@ -40,6 +40,8 @@
       - установить локер на закрытые уровни
       - управление стрелками и кнопками улучшить, увеличить шаг
 
+
+        - подкрутить параметры, чтобы с хонора нормально запускалось
 */
 import bridge from '@vkontakte/vk-bridge';
 bridge.send("VKWebAppInit", {});
@@ -113,8 +115,8 @@ var peaceful_mode = 0;
 var zero_atoms = 0;
 var level_dict = {"easy": 1, "peasy":1, "medium":2,"pmedium":2, "hard":3, "phard":3, "custom":4, "pcustom":4};
 var num_to_level = {1:"easy", 2:"medium", 3:"hard", 4:"custom"};
-var level_options = {1: 423, 2:173, 3:149};
-var plevel_options = {1: 332, 2:267, 3:233};
+var level_options = {1: 271, 2:233, 3:173};
+var plevel_options = {1: 311, 2:263, 3:203};
 var current_lvl = 1;
 var win_time = 60;
 var pause_width = 60;
@@ -161,6 +163,8 @@ var open_plevels = {1:1, 2:0, 3:0, 4:0};
 var cookie_lifetime = 8640000;
 var level_colors = ["#3e7","#39f","#e37","orange"];
 var ac_token = "";
+var max_h = 0;
+
 get_cookies();
 
 main();
@@ -1624,7 +1628,7 @@ function new_game()
         lc.style.display = "block";
         belem.style.display = "block";
         bc.style.display = "block";
-
+        max_h = parseInt(gf.style.height) - 5;
     }
     pause.style.display = "block";
     player.style.display = "block";
@@ -1639,6 +1643,7 @@ function new_game()
     start_clock();
     if(peaceful_mode == 0 && regime == "survival")
     {
+        max_h = parseInt(gf.style.height);
         var start_mis_id = setTimeout(init_missiles, mis_gen_speed*3);
     }
     
@@ -1735,7 +1740,7 @@ function create_bonus_bar()
     bc.id = "bonusCounter";
     bc.style.position = "absolute";
     bc.style.marginTop = parseInt(belem.style.marginTop) + parseInt(belem.style.height)  + "px";
-    bc.style.marginLeft = parseInt(belem.style.marginLeft) + 10 + "px";
+    bc.style.marginLeft = parseInt(belem.style.marginLeft) + parseInt(coef_x * 10) + "px";
     bc.innerText = "0";
     bc.style.fontSize = (coef_x + coef_y) * 1.2 + "em";
     bc.style.display = "none";
@@ -1782,9 +1787,9 @@ function key_pressed(event)
         {
             if(x1 - 1 > 0)
             {
-                x2 -= 20;
-                x1 -= 20;
-                var ml = parseInt(player.style.marginLeft) - 20;
+                x2 -= 60;
+                x1 -= 60;
+                var ml = parseInt(player.style.marginLeft) - 60;
                 player.style.marginLeft = ml + "px";
             }
         }
@@ -1793,10 +1798,10 @@ function key_pressed(event)
             if(y2 + 2 < gf_height)
             {
                // alert(1);
-                y2 += 20;
-                y1 += 20;
+                y2 += 60;
+                y1 += 60;
                 var mt = parseInt(player.style.marginTop);
-                player.style.marginTop = mt - 20 + "px";
+                player.style.marginTop = mt - 60 + "px";
             }
         }
         else if(event.keyCode == "39" || event.keyCode == "68")
@@ -1804,9 +1809,9 @@ function key_pressed(event)
             if(x2 + 1 < gf_width)
             {
                 //alert(1);
-                x2 += 20;
-                x1 += 20;
-                var ml = parseInt(player.style.marginLeft) + 20;
+                x2 += 60;
+                x1 += 60;
+                var ml = parseInt(player.style.marginLeft) + 60;
                 player.style.marginLeft = ml + "px";
 
             }
@@ -1817,10 +1822,10 @@ function key_pressed(event)
             if(y1 - 5  > 0)
             {
                // alert(1);
-                y1 -= 20;
-                y2 -= 20;
+                y1 -= 40;
+                y2 -= 40;
                 var mt = parseInt(player.style.marginTop);
-                player.style.marginTop = mt + 20 + "px";
+                player.style.marginTop = mt + 40 + "px";
             }
         }
         else if(event.keyCode == "32")
@@ -1864,30 +1869,33 @@ function mouse_moved(e)
         var gf_w = parseInt(gf.style.width);
         var gf_h = parseInt(gf.style.height);
         var p_h = parseInt(player.style.height);
+        var p_w = parseInt(player.style.width);
+        
+
         if(player_active)
         {
             var nx1, nx2,ny1,ny2;
             var cx, cy;
             if(mobile_mode == 0)
             {
-                nx1 = e.clientX - parseInt(parseInt(player.style.width)*3/4);
-                ny1 = e.clientY - parseInt(parseInt(player.style.height)*3/4);
+                nx1 = e.clientX - parseInt(p_w*3/4);
+                ny1 = e.clientY - parseInt(p_h*3/4);
                 cx = e.clientX;
                 cy = e.clientY;
             }
             else
             {
-                nx1 = e.touches[0].clientX - parseInt(parseInt(player.style.width)*3/4);
-                ny1 = e.touches[0].clientY - parseInt(parseInt(player.style.height)*3/4);
+                nx1 = e.touches[0].clientX - parseInt(p_w*3/4);
+                ny1 = e.touches[0].clientY - parseInt(p_h*3/4);
                 cx = e.touches[0].clientX;
                 cy = e.touches[0].clientY;
             }
-            nx2 = nx1 + parseInt(player.style.width);
-            ny2 = ny1 + parseInt(player.style.height);
+            nx2 = nx1 + p_w;
+            ny2 = ny1 + p_h;
             
             if(nx1 >= 0 && nx2 <= gf_w)
             {
-                player.style.marginLeft = cx - parseInt(parseInt(player.style.width)*3/4) + "px";
+                player.style.marginLeft = cx - parseInt(p_w*3/4) + "px";
                 x1 = nx1;
                 x2 = nx2;
             }
@@ -1895,25 +1903,25 @@ function mouse_moved(e)
             {
                 player.style.marginLeft = "0";
                 x1 = 0;
-                x2 = parseInt(player.style.width);
+                x2 = p_w;
             }
             else if(nx2 > gf_w)
             {
-                player.style.marginLeft = gf_w - parseInt(player.style.width) + "px";
-                x1 = gf_w - parseInt(player.style.width);
+                player.style.marginLeft = gf_w - p_w + "px";
+                x1 = gf_w - p_w;
                 x2 = gf_w;
             }
-            if(ny1 >= 0 && ny2 <= gf_h)
+            if(ny1 > gf_h - max_h && ny2 <= gf_h)
             {
-                player.style.marginTop = cy - parseInt(parseInt(player.style.height)*3/4) + "px";
+                player.style.marginTop = cy - parseInt(p_h*3/4) + "px";
                 y2 = gf_h - parseInt(player.style.marginTop);
                 y1 = y2 - p_h;
             }
-            else if(ny1 < 0)
+            else if(ny1 <= gf_h - max_h)
             {
-                player.style.marginTop = "0";
-                y2 = gf_h;
-                y1 = y2 - parseInt(player.style.height);
+                player.style.marginTop = gf_h - max_h + "px";
+                y2 = max_h;
+                y1 = y2 - p_h;
             }
             else if(ny2 > gf_h)
             {
@@ -2001,8 +2009,18 @@ function gen_bonuses()
         var max_step = current_lvl;
         if(current_lvl == 4)
             max_step = 1;
-        bonus_step = max_v(max_step, parseInt(secs / 15));
-        
+        //bonus_step = max_v(max_step, parseInt(secs / 15));
+        bonus_step = 1;
+        bon_move_speed = 1 + 10*min_v(3,4 - current_lvl) - parseInt(secs / min_v(6, max_v(2,3*(current_lvl - 1))));
+
+        /*
+        if(mobile_mode == 1)
+        {
+            bonus_step = min_v(3, current_lvl);
+            bon_move_speed = 11;
+        }
+        */
+       // bonus_step = min_v(bonus_step, )
         var salt = new Date();
         var ml = parseInt(Math.random()*10000*(salt%4159))%(parseInt(gf.style.width) - parseInt(bonlem.style.width));
         bonlem.style.marginLeft = ml + "px";
@@ -2032,8 +2050,9 @@ function gen_missiles()
         missile_active[new_mis] = 1;
         //missile_step = max_v(1, parseInt(secs / 10));
     
-        missile_step = 3;
-
+        missile_step = 1;
+        mis_move_speed = 3;
+        //mis_move_speed = 1;
         //dif_param = 3 - min_v(2, parseInt(secs / 10));   добавляет режим матрицы к 20-ой секунде
         dif_param = 3;
         if(ml % dif_param  == 0)
