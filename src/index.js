@@ -118,7 +118,7 @@ var num_to_level = {1:"easy", 2:"medium", 3:"hard", 4:"custom"};
 var level_options = {1: 271, 2:233, 3:173};
 var plevel_options = {1: 311, 2:263, 3:203};
 var current_lvl = 1;
-var win_time = 60;
+var win_time = 1;
 var pause_width = 60;
 var pause_height = 60;
 var home_width =   62;
@@ -164,6 +164,10 @@ var cookie_lifetime = 8640000;
 var level_colors = ["#3e7","#39f","#e37","orange"];
 var ac_token = "";
 var max_h = 0;
+var locker_width = star_width;
+var locker_height = star_height;
+
+
 
 get_cookies();
 
@@ -202,9 +206,10 @@ function main()
     create_stars();             //
     create_audio_button();      //
     check_ad();
+    create_lockers();
     //deleteCookie("opengamer");
     //update_cookies();
-    //update_levels();
+    update_levels();            //удалить
 }
 
 
@@ -221,13 +226,9 @@ function get_cookies()
         .then((data) => { 
           if (data.keys) {
              cookie = data.keys[0].value;
-             //alert(cookie);
-             //alert(Object.values(data.keys[0]));
-             //alert(Object.keys(data.keys[0]));
 
             if(cookie)
             {
-                //alert(1);
 
                 for(var i = 0; i < 4; i++)
                 {
@@ -255,43 +256,33 @@ function get_cookies()
           }
         })
         .catch((error) => {
-            //alert(2);
            
            
            
         });
-        //alert([Object.values(open_levels), Object.values(open_plevels)]);
-
-
-    /*
-    var cookie = localStorage.getItem("opengamer");
-    //localStorage.removeItem("opengamer");
-    if(cookie)
-    {
-        for(var i = 0; i < 4; i++)
-        {
-            open_levels[i + 1] = parseInt(cookie[i]);
-            if(open_levels[i+1] == 1)
-                available_lvl = i%4 + 1;
-        }
-        for(var i = 4; i < 8; i++)
-        {
-            open_plevels[i % 4 + 1] = parseInt(cookie[i]);
-            if(open_plevels[i%4+1] == 1)
-                peaceful_available = i%4 + 1;
-        }
-        for(var i = 8; i < 12; i++)
-            star_dict[i%4 + 1] = parseInt(cookie[i]);
-    }
-    else
-    {
-        open_levels = {1:1,2:0, 3:0, 4:0};
-        open_plevels = {1:1, 2:0, 3:0, 4:0};
-        star_dict = {1:0,2:0,3:0, 4:0};
-    }
-    */
-  // alert(promise1.keys[0]['value']);
 }
+
+
+function create_lockers()
+{
+    const wind = document.getElementById("window");
+
+        for(var j = 1; j <= 6; j++)
+    {
+        const lock = document.createElement("div");
+        lock.id = "locker" + j;
+        lock.style.position = 'absolute';
+        lock.style.width = parseInt((coef_x)*1 * locker_width) + "px";
+        lock.style.height = parseInt((coef_x) *1* locker_height) + "px";
+        lock.style.background = "url('./images/locker.svg')";
+        lock.style.backgroundSize = "cover";
+        lock.style.backgroundRepeat = "no-repeat";
+        lock.style.border = "3px solid black";
+        lock.style.display = "none";
+        wind.appendChild(lock);
+    }
+}
+
 
 function update_cookies()
 {
@@ -321,7 +312,6 @@ function update_cookies()
 }
 function adaptate()
 {
-    //alert([s_width, s_height]);
 
     if(s_width < 800)
     {
@@ -341,7 +331,6 @@ function create_ad_warning()
     adlem.id = "adWarning";
     adlem.style.position = "absolute";
     adlem.style.background = "url('./images/cat_warning.jpg')";
-    //alert(adlem.style.background);
     adlem.style.border = "3px solid black";
     adlem.style.width = ad_width + "px";
     adlem.style.height = ad_height + "px";
@@ -356,7 +345,6 @@ function create_ad_warning()
 function create_audio_button()
 {
     const home = document.getElementById("homeBtn");
-    //alert(home.id);
     const audio = document.createElement("audio");
     audio.id = "audio";
     audio.setAttribute('src', './audios/main_theme.mp3');
@@ -810,15 +798,7 @@ function create_sure_bar()
     yeslem.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     yeslem.style.width = "40%";
     yeslem.style.display = "inline-block";
-    /*
-    yeslem.style.marginTop = parseInt(coef_y * 20) + "px";
-    yeslem.style.marginBottom = parseInt(coef_y * 10) + "px";
-    yeslem.style.height = parseInt(coef_y * 30) + "px";
-    yeslem.style.lineHeight = parseInt(coef_y * 30) + "px";
-    yeslem.style.verticalAlign = "middle";
-    yeslem.style.display = "inline";
-    yeslem.style.borderRadius = "5%";
-*/
+
     const yestext = document.createElement("span");
     yestext.id = 'yestext';
     yestext.onclick = yes_sure;
@@ -941,7 +921,6 @@ function create_home_button()
     home.style.width = parseInt((coef_x+ coef_y) / 2 * home_width) + "px";
     home.style.height = parseInt((coef_x + coef_y)/2* home_height) + "px";
     home.style.background = "url('./images/home_icon2.svg')";
-    //alert([home.style.width, home.style.height]);
     home.style.backgroundSize = "cover";
     home.style.backgroundRepeat = "no-repeat";
     home.style.borderRadius = "50%";
@@ -978,6 +957,7 @@ function home_clicked()
         //alert(1);
         display_main();
         hide_stars();
+        hide_lockers();
         const lvl_page = document.getElementById("levelPage");
         lvl_page.style.display = "none";
         const plvl_page = document.getElementById("plevelPage");
@@ -1214,6 +1194,7 @@ function clicked_ok()
             plvpage.style.display = "block";
             display_stars();
         }
+        display_lockers();
 }
 
 function mouse_over_level(event)
@@ -1230,6 +1211,67 @@ function mouse_over_level(event)
     }
 
 }
+
+function display_lockers()
+{
+    const lvpage = document.getElementById('levelPage');
+    if(lvpage.style.display == "block")
+    {
+        for(var i = 0; i < 4; i++)
+        {
+            const lvl = document.getElementById(num_to_level[i + 1]);
+            const lock = document.getElementById("locker" + (i+1));
+
+            if(open_levels[i+1] == 1)
+            {
+                lock.style.display = "none";
+            }
+            else
+            {
+                lvl.style.background = "#777";
+                var rect = lvl.getBoundingClientRect();
+                var rect2 = lvpage.getBoundingClientRect();
+                lock.style.border = "none";
+                lock.style.width = rect.bottom - rect.top -4 + "px";
+                lock.style.height = lock.style.width;
+                lock.style.marginLeft = rect2.right - parseInt(lock.style.width) - parseInt(20*coef_x) + "px";
+                lock.style.marginTop = rect.top + 1 + "px";
+                lock.style.display = "block";
+            }
+        }
+    }
+    const plvlpage = document.getElementById("plevelPage");
+    if(plvlpage.style.display == "block")
+    {
+        for(var i = 0; i < 4; i++)
+        {
+            const lvl = document.getElementById("p" + num_to_level[i + 1]);
+            const lock = document.getElementById("locker" + (i+1));
+
+            if(open_plevels[i+1] == 1)
+            {
+                lock.style.display = "none";
+            }
+            else
+            {
+                lvl.style.background = "#777";
+                
+                var rect = lvl.getBoundingClientRect();
+                var rect2 = plvlpage.getBoundingClientRect();
+                var ind = i + 3;
+                const lock = document.getElementById("locker" +ind);
+                lock.style.border = "none";
+                lock.style.width = rect.bottom - rect.top - 4 + "px";
+                lock.style.height = lock.style.width;
+                lock.style.marginLeft = rect2.right - parseInt(lock.style.width) -parseInt(20*coef_x) + "px";
+                lock.style.marginTop = rect.top + 1 + "px";
+                lock.style.display = "block";
+                
+            }
+        }
+    }
+}
+
 
 function mouse_out_level(event)
 {
@@ -1301,6 +1343,7 @@ function level_chosen(event)
     const lvpage = document.getElementById("levelPage");
     const plvpage = document.getElementById("plevelPage");
     hide_stars();
+    hide_lockers();
     plvpage.style.display = "none";
     lvpage.style.display = "none";
 
@@ -1309,7 +1352,6 @@ function level_chosen(event)
         temp_lvl = peaceful_available;
     if(level_dict[lvl.id] > temp_lvl)
     {
-        //alert([temp_lvl, available_lvl, level_dict[lvl.id]]);
         const warn = document.getElementById("warning");
         warn.style.display = "block";
     }
@@ -1498,6 +1540,7 @@ function choose_survival()
     page.style.display = "none";
     const levels = document.getElementById("levelPage");
     levels.style.display = "block";
+    display_lockers();
 }
 
 
@@ -1516,6 +1559,7 @@ function start_peaceful_mode()
     const plvl_page = document.getElementById("plevelPage");
     plvl_page.style.display = "block";
     display_stars();
+    display_lockers();
     //const startlem = document.getElementById("startBtn");
     //startlem.style.display = "block";
 }
@@ -1797,7 +1841,6 @@ function key_pressed(event)
         {
             if(y2 + 2 < gf_height)
             {
-               // alert(1);
                 y2 += 60;
                 y1 += 60;
                 var mt = parseInt(player.style.marginTop);
@@ -1808,7 +1851,6 @@ function key_pressed(event)
         {
             if(x2 + 1 < gf_width)
             {
-                //alert(1);
                 x2 += 60;
                 x1 += 60;
                 var ml = parseInt(player.style.marginLeft) + 60;
@@ -1821,7 +1863,6 @@ function key_pressed(event)
         {
             if(y1 - 5  > 0)
             {
-               // alert(1);
                 y1 -= 40;
                 y2 -= 40;
                 var mt = parseInt(player.style.marginTop);
@@ -2148,15 +2189,15 @@ function change_time()
 function update_levels()
 {
 
-    //alert('from update');
-    //alert(Object.values(open_levels));
     for(var i = 0; i < 4; i++)
     {
         const lvl = document.getElementById(num_to_level[i + 1]);
         if(open_levels[i+1] == 1)
             lvl.style.background = level_colors[i];
         else
+        {
             lvl.style.background = "#777";
+        }
     }
     for(var i = 0; i < 4; i++)
     {
@@ -2164,8 +2205,11 @@ function update_levels()
         if(open_plevels[i+1] == 1)
             lvl.style.background = level_colors[i];
         else
+        {
             lvl.style.background = "#777";
+        }
     }
+
 }
 
 function hide_pause_button()
@@ -2297,6 +2341,7 @@ function display_main()
     const lc = document.getElementById("lifesCounter");
     const bc = document.getElementById("bonusCounter");
     hide_stars();
+    hide_lockers();
     bc.style.display = "none";
     lc.style.display = "none";
     lifes.style.display = "none";
@@ -2314,10 +2359,17 @@ function display_main()
     {
         plvl_page.style.display = "block";
         display_stars();
-        //alert(2);
+    }
+    display_lockers();
+}
+function hide_lockers()
+{
+    for(var i = 1; i <= 6; i++)
+    {
+        const lock = document.getElementById("locker" + i);
+        lock.style.display = "none";
     }
 }
-
 function create_lose_bar()
 {
     const rb = document.createElement("div");
@@ -2515,7 +2567,6 @@ function move_bonuses()
                 if(bx1 >= x1 && bx1 <= x2 && by2 >= y1 && by2 <= y2 || 
                     bx2 >= x1 && bx2 <= x2 && by2 >= y1 && by2 <= y2)
                 {
-                    //alert([bx1,x1,])
                     const bb = document.getElementById("bonusCounter");
                     bonus_counter += 1;
                     bb.innerText = bonus_counter;
