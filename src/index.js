@@ -31,17 +31,12 @@
 
 
       - в случае победы 
-      - убрать в режиме вспышка сверху бонус бар и полет бонусов 
-      - установить move_speed в 11 для bonus_move и missile move, скорректировать bonus и missile step
-      - простой уровень в peaceful режиме сделать попроще, замедлить бонусы
       - подредачить инфо: написать 1 пропущенный атом -1 жизнь, У вас 3 жизни
       - сделать 2 инфо:  для тех кто с телефона и с компа
-      - бонусы для телефона увеличить в 1,5 раза
-      - установить локер на закрытые уровни
-      - управление стрелками и кнопками улучшить, увеличить шаг
+        адаптировать бар выбора скорости для ракет и бонусов в пользовательском уровне
+        и всплывающий winbar после него
+        подкорректировать его и отправить на модерацию
 
-
-        - подкрутить параметры, чтобы с хонора нормально запускалось
 */
 import bridge from '@vkontakte/vk-bridge';
 bridge.send("VKWebAppInit", {});
@@ -443,7 +438,7 @@ function create_stars()
             starlem.id = j + "s" + i;
 
             starlem.style.position = "relative";
-            starlem.style.width = parseInt((coef_x)*1.3 * star_width) + "px";
+            starlem.style.width = parseInt((coef_x)*1.3* star_width) + "px";
             starlem.style.height = parseInt((coef_x) *1.3* star_height) + "px";
             //starlem.style.display = "inline-block";
             starlem.style.background = gray_path_value;
@@ -523,8 +518,8 @@ function display_animated_stars()
         else
             star.style.background = gray_path_value;
         star.style.backgroundSize = "cover";
-        star.style.width = parseInt(star.style.width) * 1.4 + "px";
-        star.style.height = parseInt(star.style.height) * 1.4 + "px";
+        star.style.width = parseInt((coef_x)*1.3*1.4* star_width) + "px";
+        star.style.height = parseInt((coef_x)*1.3*1.4 *star_height) + "px";
         star.style.backgroundRepeat = "no-repeat";
         star.style.opacity = "0";
         star.style.display = "inline-block";
