@@ -113,7 +113,7 @@ var num_to_level = {1:"easy", 2:"medium", 3:"hard", 4:"custom"};
 var level_options = {1: 271, 2:233, 3:173};
 var plevel_options = {1: 311, 2:263, 3:203};
 var current_lvl = 1;
-var win_time = 60;
+var win_time = 1;
 var pause_width = 60;
 var pause_height = 60;
 var home_width =   62;
@@ -121,7 +121,7 @@ var home_height = 62;
 var heart_width = 56;       // 35 * 28
 var heart_height = 48;
 var text_60sec = "Продержитесь 60 секунд уворачиваясь от ракет \n Управление перетаскиванием персонажа /стрелками' / зажатым курсором или пальцем. \nПауза - пробел \nУдачи!";
-var text_peaceful = "Ловите атомы в течение минуты, до того как они упадут на землю. \nУ вас 3 жизни. \nУправление зажатым курсором, пальцем, клавишами 'wasd'. \nПауза - пробел. Удачи!";
+var text_peaceful = "Ловите атомы в течение минуты, до того как они упадут на землю. \nУ вас 3 жизни. \nУправление перетаскиванием персонажа курсором или пальцем, клавишами 'wasd'. \nПауза - пробел. Удачи!";
 var player_lifes = 3;
 var peaceful_available = 1;
 var temp_lvl = 1;
@@ -1391,27 +1391,29 @@ function create_custom_menu()
     cuslem.id = "customMenu";
     //cuslem.innerText = "Выберите скорость ракет";
     cuslem.style.fontSize = (coef_x + coef_y) + "em";
-    cuslem.style.background = "#fff";
+    cuslem.style.background = "rgba(255,255,255, 0.8)";
     cuslem.style.border = "3px solid black";
     cuslem.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
     cuslem.style.textAlign = "center";
-    cuslem.style.marginLeft = parseInt(coef_x * 200) + "px";
-    cuslem.style.width = custom_menu_width + "px";
-    cuslem.style.height = custom_menu_height + "px";;
+    cuslem.style.marginLeft = "15%";
+    //cuslem.style.width = custom_menu_width + "px";
+    //cuslem.style.height = custom_menu_heigh + "px";;
     cuslem.style.marginTop = parseInt(coef_y * 200) + "px";
-    cuslem.style.position = "relative";
-    
+    cuslem.style.position = "absolute";
+    cuslem.style.width = "60%";
+    cuslem.style.height= "auto";
     const textlem = document.createElement("div");
     textlem.id = "ptext";
-    textlem.style.position = "absolute";
-    textlem.style.fontSize = (coef_x + coef_y) /2 * 0.8 + "em";
+    textlem.style.position = "relative";
+    textlem.style.fontSize = (coef_x + coef_y) /2  + "em";
     textlem.style.width = "100%";
     textlem.style.height = "auto";
-        
+    textlem.style.display = "block";
+    textlem.innerText = "Укажите скорость падения атомов";
 
     const range = document.createElement("input");
     range.id = "range";
-    range.style.position = "absolute";
+    range.style.position = "relative";
     range.setAttribute('type', 'range');
     range.setAttribute('min', '0');
     range.setAttribute('max', '100');
@@ -1421,17 +1423,17 @@ function create_custom_menu()
     range.style.height = "auto";
     range.style.marginLeft = "10%";
     range.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
-    range.style.marginTop = parseInt(coef_y * 130) + "px";
+    range.style.marginTop = 10 + "px";
     range.style.display = "block";
     range.oninput = input_range;
     
     const output = document.createElement("output");
     output.id = "rangeOutput";
     output.innerText = "50";
-    output.style.position = "absolute";
+    output.style.position = "relative";
     output.style.display = "block";
     output.style.width = "95%";
-    output.style.marginTop = parseInt(coef_y * 90) + "px";
+    //output.style.marginTop = parseInt(coef_y * 90) + "px";
     output.textContent = range.value;
     /*
     const outcont = document.createElement("div");
@@ -1446,14 +1448,15 @@ function create_custom_menu()
     choose.onclick = speed_chosen;
     choose.style.fontSize = (coef_x + coef_y) / 2 * 1.8 + "em";
  
-    choose.style.position = "absolute";
-    choose.style.width = "70%";
+    choose.style.position = "relative";
+    choose.style.width = "75%";
     choose.style.marginLeft = "10%";
+    choose.style.marginTop = "10px";
     choose.onmouseover = mouse_over_choose;
     choose.onmouseout = mouse_out_choose;
     choose.style.background = "#3e7";
-    choose.style.padding = parseInt(coef_y * 10) + "px " + parseInt(coef_x * 10) + "px";
-    choose.style.marginTop = parseInt(coef_y * 190) + "px";
+    choose.style.padding = parseInt(coef_y * 20) + "px " + parseInt(coef_x * 10) + "px";
+    //choose.style.marginTop = parseInt(coef_y * 190) + "px";
     choose.style.height = "auto";
     choose.style.display = "block";
     choose.style.borderRadius = "5%";
@@ -1499,14 +1502,15 @@ function speed_chosen()
     }
     else if(regime == "survival")
     {
+        peaceful_mode = 0;
         mis_gen_speed = 7 + parseInt(10000 / val);
         if(mis_gen_speed % 2 == 0)
             mis_gen_speed += 1;
     }
     else
     {   
-        
-        bon_gen_speed = 7 + parseInt(3000 / val);
+        zero_atoms = 0;
+        bon_gen_speed = 7 + parseInt(10000 / val);
         if(bon_gen_speed % 2 == 0)
             bon_gen_speed += 1;
     }
@@ -2335,8 +2339,11 @@ function display_main()
     const lifes = document.getElementById("lifesBar");
     const lc = document.getElementById("lifesCounter");
     const bc = document.getElementById("bonusCounter");
+    const cuslem = document.getElementById("customMenu");
+
     hide_stars();
     hide_lockers();
+    cuslem.style.display = "none";
     bc.style.display = "none";
     lc.style.display = "none";
     lifes.style.display = "none";
