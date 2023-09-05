@@ -103,7 +103,6 @@ var win_bar_height = 160;
 var custom_menu_width = 400;
 var custom_menu_height = 300;
 var sure_width = 400;
-var sure_height = 150;
 var available_lvl = 1;
 var regime = 0;
 var peaceful_mode = 0;
